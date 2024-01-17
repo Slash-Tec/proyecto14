@@ -19,6 +19,7 @@ Route::get('/', function () {
 });
 
 Route::get('/' , WelcomeController::class);
+Route::get('categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
 
 Route::middleware([
     'auth:sanctum',
