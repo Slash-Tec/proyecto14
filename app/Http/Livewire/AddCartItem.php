@@ -9,6 +9,7 @@ class AddCartItem extends Component
     public $product;
     public $quantity;
     public $qty = 1;
+    public $color_id = '';
 
     public function mount()
     {
