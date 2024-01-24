@@ -9,11 +9,12 @@ class AddCartItem extends Component
     public $product;
     public $quantity;
     public $qty = 1;
-    public $color_id = '';
+    public $options = [];
 
     public function mount()
     {
         $this->quantity = $this->product->quantity;
+        $this->options['image'] = Storage::url($this->product->images->first()->url);
     }
 
     public function decrement()
@@ -24,6 +25,18 @@ class AddCartItem extends Component
     public function increment()
     {
         $this->qty++;
+    }
+
+    public function addItem()
+    {
+        Cart::add([
+            'id'=>$this->product->id,
+            'name'=>$this->product->name,
+            'qty'=>$this->qty,
+            'price'=>$this->product->price,
+            'weight'=>550,
+            'options'=>$this->options,
+        ]);
     }
 
     public function render()
