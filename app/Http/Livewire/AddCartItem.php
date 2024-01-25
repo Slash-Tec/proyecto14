@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire;
 
+use Cart;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 
 class AddCartItem extends Component
@@ -37,6 +39,8 @@ class AddCartItem extends Component
             'weight'=>550,
             'options'=>$this->options,
         ]);
+
+        $this->emitTo('dropdown-cart', 'render');
     }
 
     public function render()
