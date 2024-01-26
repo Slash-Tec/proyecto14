@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Product;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 use Livewire\WithPagination;
 

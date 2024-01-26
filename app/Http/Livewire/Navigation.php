@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Category;
 use Livewire\Component;
 
 class Navigation extends Component
