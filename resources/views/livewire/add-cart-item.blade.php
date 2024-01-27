@@ -3,7 +3,7 @@
         <span class="font-semibold text-lg">Stock disponible:</span> {{$quantity}}
     </p>
     <div class="flex">
-        <div class="mr-4">
+        <div class="flex items-center" x-data>
             <x-jet-secondary-button
                 disabled
                 x-bind:disabled="$wire.qty <= 1"
