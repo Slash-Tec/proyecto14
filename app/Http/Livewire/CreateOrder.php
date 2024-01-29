@@ -7,6 +7,14 @@ use Livewire\Component;
 
 class CreateOrder extends Component
 {
+    public $rules = [
+        'contact' => 'required',
+        'phone' => 'required',
+        'envio_type' => 'required'
+    ];
+
+    public $envio_type = 1;
+    public $contact, $phone;
     public $address, $reference;
     public $departments, $cities = [], $districts = [];
     public $department_id = '', $city_id = '', $district_id = '';
@@ -14,6 +22,19 @@ class CreateOrder extends Component
     public function mount()
     {
         $this->departments = Department::all();
+    }
+
+    public function create_order()
+    {
+        if($this->envio_type == 2){
+            $rules['department_id'] = 'required';
+            $rules['city_id'] = 'required';
+            $rules['district_id'] = 'required';
+            $rules['address'] = 'required';
+            $rules['reference'] = 'required';
+        }
+
+        $this->validate($rules);
     }
 
     public function render()
