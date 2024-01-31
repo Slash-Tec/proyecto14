@@ -2,7 +2,7 @@
     <div class="container-menu py-8">
         <ul>
             @forelse($products as $product)
-                <x-product-list :product="$product"></x-product-list>
+                <x-products-list :product="$product"></x-products-list>
             @empty
                 <li class="bg-white rounded-lg shadow-2xl">
                     <div class="p-4">

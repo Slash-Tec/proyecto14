@@ -26,7 +26,7 @@ class CategoryFilter extends Component
         }
 
         if ($this->marca) {
-            $productsQuery = $productsQUery->whereHas('brand', function(Builder $query){
+            $productsQuery = $productsQuery->whereHas('brand', function(Builder $query){
                 $query->where('name', $this->marca);
             });
         }
