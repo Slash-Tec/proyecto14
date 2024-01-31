@@ -9,13 +9,24 @@ class OrderController extends Controller
 {
     public function show(Order $order)
     {
+        $this->authorize('view', $order);
+
+        $items = json_decode($order->content);
+
         return view('orders.show', compact('order'));
     }
 
-    public function payment(Order $order)
+    public function index()
+    {
+        $orders = Order::where('user_id', auth()->user()->id)->get();
+
+        return view('orders.index', compact('orders'));
+    }
+
+    /*public function payment(Order $order)
     {
         $items = json_decode($order->content);
 
         return view('orders.payment', component('order', 'items'));
-    }
+    }*/
 }

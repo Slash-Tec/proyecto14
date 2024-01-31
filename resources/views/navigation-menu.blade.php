@@ -100,11 +100,9 @@
                                 {{ __('Profile') }}
                             </x-jet-dropdown-link>
 
-                            @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                                <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">
-                                    {{ __('API Tokens') }}
-                                </x-jet-dropdown-link>
-                            @endif
+                            <x-jet-dropdown-link href="{{ route('orders.index') }}">
+                                {{ __('My Orders') }}
+                            </x-jet-dropdown-link>
 
                             <div class="border-t border-gray-100"></div>
 
