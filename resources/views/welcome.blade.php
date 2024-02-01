@@ -12,6 +12,7 @@
             </section>
         @endforeach
     </div>
+
     @push('scripts')
         <script>
             Livewire.on('glider', function(id){
