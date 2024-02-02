@@ -11,17 +11,19 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
         <!-- Styles -->
-        @livewireStyles
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('vendor/glider-js/glider.min.js') }}">
-        <link rel="stylesheet" href="{{ asset('vendor/flex-slider/flexslider.css') }}">
+        {{--<link rel="stylesheet" href="{{ asset('vendor/glider-js/glider.min.js') }}">
+        <link rel="stylesheet" href="{{ asset('vendor/flex-slider/flexslider.css') }}">--}}
+
+        @livewireStyles
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
-        <script src="{{ asset('vendor/glider-js/glider.min.js') }}"></script>
+        <script src="{{ asset('vendor/ckeditor5/build/ckeditor.js') }}"></script>
+        {{--<script src="{{ asset('vendor/glider-js/glider.min.js') }}"></script>
         <script src="{{ asset('vendor/flex-slider/node_modules/jquery/dist/jquery.js') }}"></script>
-        <script src="{{ asset('vendor/flex-slider/jquery.flexslider-min.js') }}"></script>
+        <script src="{{ asset('vendor/flex-slider/jquery.flexslider-min.js') }}"></script>--}}
 
     </head>
     <body class="font-sans antialiased">
