@@ -30,8 +30,8 @@
                 class="w-full"
                 wire:model="name"
                 placeholder="Ingrese el slug del producto"/>
+            <x-jet-input-error for="name"/>
         </div>
-        <x-jet-input-error for="name"/>
     </div>
 
     <div class="mb-4">
