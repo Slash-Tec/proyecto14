@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use App\Models\Size;
 use Livewire\Component;
+use App\Models\ColorSize as TbPivot;
 
 class SizeProduct extends Component
 {
@@ -20,9 +21,17 @@ class SizeProduct extends Component
     {
         $this->validate();
 
-        $this->product->sizes()->create([
-            'name'=>$this->name,
-        ]);
+        $size = Size::where('product_id', $this->product->id)
+            ->where('name', $this->name)
+            ->first();
+
+        if ($size) {
+            $this->emit('errorSize', 'Esa talla ya existe');
+        } else {
+            $this->product->sizes()->create([
+                'name' => $this->name
+            ]);
+        }
 
         $this->product = $this->product->fresh();
         $this->reset('name');

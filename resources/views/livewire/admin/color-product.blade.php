@@ -126,7 +126,7 @@
                                     confirmButtonText: 'Yes, delete it!'
                                 }).then((result)=> {
                                     if (result.isComfirmed){
-                                        Livewire.emit('delete', pivot);
+                                        Livewire.emitTo('admin.color-product', 'delete', pivot);
                                         Swal.fire(
                                             'Deleted!',
                                             'Your file has been deleted.',

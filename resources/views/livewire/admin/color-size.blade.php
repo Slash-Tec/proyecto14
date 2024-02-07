@@ -85,4 +85,86 @@
             </table>
         </div>
     @endif
+    <x-jet-dialog-modal wire:model="open">
+        <x-slot name="title">
+            Editar colores
+        </x-slot>
+
+        <x-slot name="content">
+            <div class="mb-4">
+                <x-jet-label>
+                    Color
+                </x-jet-label>
+                <select class="form-control w-full" wire:model="pivot_color_id">
+                    <option value="">Seleccione un color</option>
+                    @foreach ($colors as $color)
+                        <option value="{{ $color->id }}">{{ __(ucfirst($color->name)) }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <x-jet-label>
+                    Cantidad
+                </x-jet-label>
+                <x-jet-input class="w-full" wire:model="pivot_quantity" type="number"
+                             placeholder="Ingrese una cantidad"/>
+            </div>
+        </x-slot>
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="$set('open', false)">
+                Cancelar
+            </x-jet-secondary-button>
+            @push('scripts')
+                <script>
+                    Livewire.on('deletePivot', pivot => {
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result)=> {
+                            if (result.isComfirmed){
+                                Livewire.emit('delete', pivot);
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Your file has been deleted.',
+                                    'success'
+                                )
+                            }
+                        })
+                    })
+                </script>
+            @endpush
+            <x-jet-button wire:click="update" wire:loading.attr="disabled" wire:target="update">
+                Actualizar
+            </x-jet-button>
+            @push('scripts')
+                <script>
+                    Livewire.on('deletePivot', pivot => {
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed){
+                                Livewire.emitTo('admin.color-size', 'delete', pivot);
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Your file has been deleted.',
+                                    'success'
+                                )
+                            }
+                        })
+                    })
+                </script>
+            @endpush
+        </x-slot>
+    </x-jet-dialog-modal>
 </div>

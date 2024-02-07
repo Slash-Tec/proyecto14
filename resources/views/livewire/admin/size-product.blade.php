@@ -80,7 +80,7 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.emit('delete', sizeId);
+                    Livewire.emitTo('admin.size-product', 'delete', sizeId);
                     Swal.fire(
                         'Deleted!',
                         'Your file has been deleted.',
@@ -89,5 +89,13 @@
                 }
             })
         })
+
+        Livewire.on('errorSize', mensaje => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: mensaje,
+            }) /* */
+        });
     </script>
 @endpush
