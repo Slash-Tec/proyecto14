@@ -4,11 +4,32 @@
             <div class="bg-white rounded-lg shadow-lg px-6 py-4 mb-6 flex items-center">
                 <p class="text-gray-700 uppercase"><span class="font-semibold">Número de Orden:</span>{{ $order->id }}</p>
 
-                @if($order->status == 1)
-                    <x-button-link class="ml-auto" href="{{ route('orders.payment', $order) }}">
-                        Ir a pagar
-                    </x-button-link>
-                @endif
+                <form wire:submit.prevent="update">
+                    <div class="flex space-x-3 mt-2">
+                        <x-jet-label>
+                            <input wire:model="status" type="radio" name="status" value="2" class="mr-2">
+                            RECIBIDO
+                        </x-jet-label>
+                        <x-jet-label>
+                            <input wire:model="status" type="radio" name="status" value="3" class="mr-2">
+                            ENVIADO
+                        </x-jet-label>
+                        <x-jet-label>
+                            <input wire:model="status" type="radio" name="status" value="4" class="mr-2">
+                            ENTREGADO
+                        </x-jet-label>
+                        <x-jet-label>
+                            <input wire:model="status" type="radio" name="status" value="5" class="mr-2">
+                            ANULADO
+                        </x-jet-label>
+                    </div>
+
+                    <div class="flex mt-2">
+                        <x-jet-button class="ml-auto">
+                            Actualizar
+                        </x-jet-button>
+                    </div>
+                </form>
             </div>
 
             <div class="bg-white rounded-lg shadow-lg p-6 mb-6">

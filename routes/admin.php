@@ -16,6 +16,8 @@ Route::get('products/{product}/edit', EditProduct::class)->name('admin.products.
 Route::get('categories', [CategoryController::class, 'index'])->name('admin.categories.index');
 Route::get('categories/{category}', ShowCategory::class)->name('admin.categories.show');
 Route::get('brands', BrandComponent::class)->name('admin.brands.index');
+Route::get('orders', [OrderController::class, 'index'])->name('admin.orders.index');
+Route::get('orders/{order}', [OrderController::class, 'show'])->name('admin.orders.show');
 
 Route::get('/', function() {
     return 'Hola administrador';
