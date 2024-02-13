@@ -11,6 +11,7 @@ class CategoryFilter extends Component
 {
     use WithPagination;
     public $view = 'grid';
+    public $queryString = ['subcategoria', 'marca'];
     public $category, $subcategoria, $marca;
 
     public function render()
@@ -21,7 +22,7 @@ class CategoryFilter extends Component
 
         if ($this->subcategoria){
             $productsQuery = $productsQuery->whereHas('subcategory', function(Builder $query){
-                $query->where('name', $this->subcategoria);
+                $query->where('slug', $this->subcategoria);
             });
         }
 
@@ -37,6 +38,11 @@ class CategoryFilter extends Component
 
     public function limpiar()
     {
-        $this->reset(['subcategoria', 'marca']);
+        $this->reset(['subcategoria', 'marca', 'page']);
+    }
+
+    public function updatedMarca()
+    {
+        $this->resetPage();
     }
 }

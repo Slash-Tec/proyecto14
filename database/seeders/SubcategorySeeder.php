@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Subcategory;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 use Str;
 
 class SubcategorySeeder extends Seeder
@@ -119,7 +120,7 @@ class SubcategorySeeder extends Seeder
         ];
 
         foreach ($subcategories as $subcategory){
-            Subcategory::factory(1)->create($subcategory);
+            Subcategory::create($subcategory);
         }
     }
 }
