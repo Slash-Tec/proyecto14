@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Livewire\Admin\BrandComponent;
 use App\Http\Livewire\Admin\CreateProduct;
 use App\Http\Livewire\Admin\EditProduct;
 use App\Http\Livewire\Admin\ShowCategory;
@@ -14,6 +15,7 @@ Route::get('products/{product}/edit', function() {})->name('admin.products.edit'
 Route::get('products/{product}/edit', EditProduct::class)->name('admin.products.edit');
 Route::get('categories', [CategoryController::class, 'index'])->name('admin.categories.index');
 Route::get('categories/{category}', ShowCategory::class)->name('admin.categories.show');
+Route::get('brands', BrandComponent::class)->name('admin.brands.index');
 
 Route::get('/', function() {
     return 'Hola administrador';
