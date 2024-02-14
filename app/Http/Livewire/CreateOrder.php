@@ -31,11 +31,15 @@ class CreateOrder extends Component
     public function create_order()
     {
         if($this->envio_type == 2){
-            $rules['department_id'] = 'required';
-            $rules['city_id'] = 'required';
-            $rules['district_id'] = 'required';
-            $rules['address'] = 'required';
-            $rules['reference'] = 'required';
+            $order->shipping_cost=$this->shipping_cost;
+
+            $order->envio = json_encode([
+                'department' => Department::find($this->department_id)->name,
+                'city' => City::find($this->city_id)->name,
+                'district' => District::find($this->district_id)->name,
+                'address' => $this->address,
+                'reference' => $this->reference
+            ]);
         }
 
         $this->validate($rules);
