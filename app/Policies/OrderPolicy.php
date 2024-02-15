@@ -21,6 +21,14 @@ class OrderPolicy
         //
     }
 
+    public function payment(User $user, Order $order){
+        if ($order->status == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Determine whether the user can view the model.
      *
@@ -30,7 +38,7 @@ class OrderPolicy
      */
     public function view(User $user, Order $order)
     {
-        if($order->user_id == $user->id){
+        if ($order->user_id == $user->id) {
             return true;
         } else {
             return false;
@@ -94,13 +102,5 @@ class OrderPolicy
     public function forceDelete(User $user, Order $order)
     {
         //
-    }
-
-    public function payment(User $user, Order $order){
-        if ($order->status == 1) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }

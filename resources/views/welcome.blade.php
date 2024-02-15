@@ -8,6 +8,8 @@
                     </h1>
                     <a href="{{ route('categories.show', $category) }}" class="text-orange-500 hover:text-orange-400 hover:underline ml-2 font-semibold">Ver más</a>
                 </div>
+
+
                 @livewire('category-products', ['category' => $category])
             </section>
         @endforeach
@@ -15,8 +17,8 @@
 
     @push('scripts')
         <script>
-            Livewire.on('glider', function(id){
-                new Glider(document.querySelector('.glider-' + id),{
+            Livewire.on('glider', function (id) {
+                new Glider(document.querySelector('.glider-' + id), {
                     slidesToShow: 1,
                     slidesToScroll: 1,
                     draggable: true,

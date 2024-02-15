@@ -2,8 +2,8 @@
 
 namespace App\Listeners;
 
-use App\Events\Logout;
-use Cart;
+use Illuminate\Auth\Events\Logout;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 

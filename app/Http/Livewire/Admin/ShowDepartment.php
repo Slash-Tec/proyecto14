@@ -28,6 +28,7 @@ class ShowDepartment extends Component
         'createForm.cost' => 'costo'
     ];
 
+
     public function mount(Department $department){
         $this->department = $department;
         $this->getCities();
@@ -46,8 +47,11 @@ class ShowDepartment extends Component
 
         $this->department->cities()->create($this->createForm);
 
+
         $this->reset('createForm');
+
         $this->getCities();
+
         $this->emit('saved');
     }
 

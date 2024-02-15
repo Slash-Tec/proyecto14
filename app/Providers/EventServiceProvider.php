@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 
+
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -30,6 +31,7 @@ class EventServiceProvider extends ServiceProvider
         Logout::class => [
             MergeTheCartLogout::class,
         ],
+
     ];
 
     /**

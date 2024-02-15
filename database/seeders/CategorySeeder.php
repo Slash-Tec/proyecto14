@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\Database\Seeder;
-use Str;
+use Illuminate\Support\Str;
 
 class CategorySeeder extends Seeder
 {
@@ -22,7 +22,6 @@ class CategorySeeder extends Seeder
                 'slug' => Str::slug('Celulares y tablets'),
                 'icon' => '<i class="fas fa-mobile-alt"></i>'
             ],
-
             [
                 'name' => 'TV, audio y video',
                 'slug' => Str::slug('TV, audio y video'),
@@ -48,7 +47,7 @@ class CategorySeeder extends Seeder
             ],
         ];
 
-        foreach ($categories as $category){
+        foreach ($categories as $category) {
             $category = Category::factory()->create($category);
 
             $brands = Brand::factory(4)->create();

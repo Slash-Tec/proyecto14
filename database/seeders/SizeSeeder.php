@@ -22,12 +22,13 @@ class SizeSeeder extends Seeder
 
         $sizes = ['Talla S', 'Talla M', 'Talla L'];
 
-        foreach ($products as $product){
-            foreach ($sizes as $size){
+        foreach ($products as $product) {
+            foreach ($sizes as $size) {
                 $product->sizes()->create([
                     'name' => $size
                 ]);
             }
         }
+
     }
 }

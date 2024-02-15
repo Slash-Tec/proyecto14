@@ -11,4 +11,5 @@ class CategoryController extends Controller
     {
         return view('categories.show', compact('category'));
     }
+
 }

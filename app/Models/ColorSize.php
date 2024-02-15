@@ -9,7 +9,7 @@ class ColorSize extends Model
 {
     use HasFactory;
 
-    protected $table = 'color_size';
+    protected $table = "color_size";
 
     public function color()
     {

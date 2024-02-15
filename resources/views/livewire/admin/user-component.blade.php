@@ -8,10 +8,10 @@
     <div class="container-menu py-12">
         <x-table-responsive>
             <div class="px-6 py-4">
-                <x-jet-input wire:model="search" type="text" class="w-full" placeholder="Escriba algo para filtrar"/>
+                <x-jet-input wire:model="search" type="text" class="w-full" placeholder="Escriba algo para filtrar" />
             </div>
 
-            @if (count($users))
+        @if (count($users))
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                     <tr>
@@ -38,27 +38,27 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
 
-                    @foreach($users as $user)
-                        <tr wire:key="{{$user->email}}">
+                    @foreach ($users as $user)
+                        <tr wire:key="{{ $user->email }}">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-gray-900">
-                                    {{ $user->id }}
+                                    {{$user->id}}
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-gray-900">
-                                    {{ $user->name }}
+                                <div class="text-sm text-gray-900">
+                                    {{$user->name}}
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-gray-900">
-                                    {{ $user->email }}
+                                <div class="text-sm text-gray-900">
+                                    {{$user->email}}
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                <div class="text-gray-900">
-                                    @if($user->roles->count())
-                                         Admin
+                                <div class="text-sm text-gray-900">
+                                    @if ($user->roles->count())
+                                        Admin
                                     @else
                                         No tiene rol
                                     @endif
@@ -66,14 +66,12 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <label>
-                                    <input {{ $user->roles->count() ? 'checked' : '' }} value="1" type="radio" name="{{$user->email}}"
-                                    wire:change="assignRole({{$user->id}}, $event.target.value">
+                                    <input {{ $user->roles->count() ? 'checked' : '' }} value="1" type="radio" name="{{$user->email}}" wire:change="assignRole({{$user->id}}, $event.target.value)">
                                     Si
                                 </label>
 
                                 <label class="ml-2">
-                                    <input {{ $user->roles->count() ? '' : 'checked' }} value="0" type="radio" name="{{$user->email}}"
-                                    wire:change="assignRole({{$user->id}}, $event.target.value">
+                                    <input {{ $user->roles->count() ? '' : 'checked' }} value="0" type="radio" name="{{$user->email}}" wire:change="assignRole({{$user->id}}, $event.target.value)">
                                     No
                                 </label>
                             </td>
@@ -87,9 +85,9 @@
                 </div>
             @endif
 
-            @if($users->hasPages())
+            @if ($users->hasPages())
                 <div class="px-6 py-4">
-                    {{ $users->links() }}
+                    {{$users->links()}}
                 </div>
             @endif
         </x-table-responsive>

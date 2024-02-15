@@ -3,7 +3,8 @@ const colors = require('tailwindcss/colors');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: [
+    mode: 'jit',
+    purge: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './vendor/laravel/jetstream/**/*.blade.php',
         './storage/framework/views/*.php',
@@ -16,12 +17,20 @@ module.exports = {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
             colors: {
-                trueGray: colors.trueGray,
+                trueGray: colors.gray,
                 orange: colors.orange,
                 lime: colors.lime,
             }
+
         },
     },
+
+    variants: {
+        extend: {
+            opacity: ['disabled'],
+        },
+    },
+
 
     plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
 };

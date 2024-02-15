@@ -21,8 +21,9 @@
                         Nombre
                     </x-jet-label>
 
-                    <x-jet-input wire:model.defer="createForm.name" type="text" class="w-full mt-1"/>
-                    <x-jet-input-error for="createForm.name"/>
+                    <x-jet-input wire:model.defer="createForm.name" type="text" class="w-full mt-1" />
+
+                    <x-jet-input-error for="createForm.name" />
                 </div>
 
                 <div class="col-span-6 sm:col-span-4">
@@ -30,9 +31,9 @@
                         Costo
                     </x-jet-label>
 
-                    <x-jet-input wire:model.defer="createForm.cost" type="number" class="w-full mt-1"/>
+                    <x-jet-input wire:model.defer="createForm.cost" type="number" class="w-full mt-1" />
 
-                    <x-jet-input-error for="createForm.cost"/>
+                    <x-jet-input-error for="createForm.cost" />
                 </div>
             </x-slot>
 
@@ -66,17 +67,17 @@
                     </thead>
 
                     <tbody class="divide-y divide-gray-300">
-                    @foreach($cities as $city)
+                    @foreach ($cities as $city)
                         <tr>
                             <td class="py-2">
                                 <a href="{{ route('admin.cities.show', $city) }}" class="uppercase underline hover:text-blue-600">
-                                    {{ $city->name }}
+                                    {{$city->name}}
                                 </a>
                             </td>
                             <td class="py-2">
                                 <div class="flex divide-x divide-gray-300 font-semibold">
-                                    <a class="pr-2 hover:text-blue-600 cursor-pointer" wire:click="edit({{$city}}">Editar</a>
-                                    <a class="pl-2 hover:text-red-600 cursor-pointer" wire:click="$emit('deleteCity', {{$city->id}})">Eliminar</a>
+                                    <a class="pr-2 hover:text-blue-600 cursor-pointer" wire:click="edit({{$city}})">Editar</a>
+                                    <a class="pl-2 hover:text-red-600 cursor-pointer" wire:click="$emit('deleteCity', {{ $city->id }})">Eliminar</a>
                                 </div>
                             </td>
                         </tr>
@@ -99,8 +100,9 @@
                             Nombre
                         </x-jet-label>
 
-                        <x-jet-input wire:model="editForm.name" type="text" class="w-full mt-1"/>
-                        <x-jet-input-error for="editForm.name"/>
+                        <x-jet-input wire:model="editForm.name" type="text" class="w-full mt-1" />
+
+                        <x-jet-input-error for="editForm.name" />
                     </div>
 
                     <div>
@@ -108,8 +110,9 @@
                             Costo
                         </x-jet-label>
 
-                        <x-jet-input wire:model="editForm.cost" type="text" class="w-full mt-1"/>
-                        <x-jet-input-error for="editForm.cost"/>
+                        <x-jet-input wire:model="editForm.cost" type="text" class="w-full mt-1" />
+
+                        <x-jet-input-error for="editForm.cost" />
                     </div>
                 </div>
             </x-slot>
@@ -147,3 +150,4 @@
         </script>
     @endpush
 </div>
+

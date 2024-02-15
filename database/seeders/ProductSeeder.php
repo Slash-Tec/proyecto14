@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-
 use App\Models\Image;
 use App\Models\Product;
 use Illuminate\Database\Seeder;

@@ -16,20 +16,16 @@
                         Productos
                     </x-jet-nav-link>
 
+                    <x-jet-nav-link href="{{ route('admin.orders.index') }}" :active="request()->routeIs('admin.orders.*')">
+                        Pedidos
+                    </x-jet-nav-link>
+
                     <x-jet-nav-link href="{{ route('admin.categories.index') }}" :active="request()->routeIs('admin.categories.*')">
                         Categorías
                     </x-jet-nav-link>
 
-                    <x-jet-nav-link href="{{ route('admin.subcategories.index') }}" :active="request()->routeIs('admin.subcategories.*')">
-                        Subcategorías
-                    </x-jet-nav-link>
-
                     <x-jet-nav-link href="{{ route('admin.brands.index') }}" :active="request()->routeIs('admin.brands.*')">
                         Marcas
-                    </x-jet-nav-link>
-
-                    <x-jet-nav-link href="{{ route('admin.orders.index') }}" :active="request()->routeIs('admin.orders.*')">
-                        Pedidos
                     </x-jet-nav-link>
 
                     <x-jet-nav-link href="{{ route('admin.departments.index') }}" :active="request()->routeIs('admin.departments.*')">
@@ -39,6 +35,7 @@
                     <x-jet-nav-link href="{{ route('admin.users.index') }}" :active="request()->routeIs('admin.users.*')">
                         Usuarios
                     </x-jet-nav-link>
+
                 </div>
             </div>
 
@@ -124,15 +121,11 @@
                                 {{ __('Profile') }}
                             </x-jet-dropdown-link>
 
-                            <x-jet-dropdown-link href="{{ route('orders.index') }}">
-                                {{ __('My Orders') }}
-                            </x-jet-dropdown-link>
-
-                            @role('admin')
-                            <x-jet-dropdown-link href="{{ route('admin.index') }}">
-                                {{ __('Admin') }}
-                            </x-jet-dropdown-link>
-                            @endrole
+                            @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
+                                <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">
+                                    {{ __('API Tokens') }}
+                                </x-jet-dropdown-link>
+                            @endif
 
                             <div class="border-t border-gray-100"></div>
 
@@ -169,20 +162,16 @@
                 Productos
             </x-jet-responsive-nav-link>
 
+            <x-jet-responsive-nav-link href="{{ route('admin.orders.index') }}" :active="request()->routeIs('admin.orders.*')">
+                Pedidos
+            </x-jet-responsive-nav-link>
+
             <x-jet-responsive-nav-link href="{{ route('admin.categories.index') }}" :active="request()->routeIs('admin.categories.*')">
                 Categorías
             </x-jet-responsive-nav-link>
 
-            <x-jet-responsive-nav-link href="{{ route('admin.subcategories.index') }}" :active="request()->routeIs('admin.subcategories.*')">
-                Subcategorías
-            </x-jet-responsive-nav-link>
-
             <x-jet-responsive-nav-link href="{{ route('admin.brands.index') }}" :active="request()->routeIs('admin.brands.*')">
                 Marcas
-            </x-jet-responsive-nav-link>
-
-            <x-jet-responsive-nav-link href="{{ route('admin.orders.index') }}" :active="request()->routeIs('admin.orders.*')">
-                Pedidos
             </x-jet-responsive-nav-link>
 
             <x-jet-responsive-nav-link href="{{ route('admin.departments.index') }}" :active="request()->routeIs('admin.departments.*')">
@@ -192,6 +181,7 @@
             <x-jet-responsive-nav-link href="{{ route('admin.users.index') }}" :active="request()->routeIs('admin.users.*')">
                 Usuarios
             </x-jet-responsive-nav-link>
+
         </div>
 
         <!-- Responsive Settings Options -->

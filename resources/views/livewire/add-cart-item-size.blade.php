@@ -18,16 +18,21 @@
             <option value="" selected disabled>Seleccione un color</option>
 
             @foreach ($colors as $color)
-                <option value="{{$color->id}}">{{ __(ucfirst($color->name)) }}</option>
+                <option value="{{$color->id}}">{{__(ucfirst($color->name))}}</option>
             @endforeach
         </select>
     </div>
 
     <p class="text-gray-700 my-4">
-        <span class="font-semibold text-lg">Stock disponible:</span> {{ $product->stock }}
+        <span class="font-semibold text-lg">Stock disponible:</span>
+        @if($quantity)
+            {{ $quantity }}
+        @else
+            {{ $product->stock }}
+        @endif
     </p>
 
-    <div class="flex">
+    <div class="flex mt-4">
         <div class="mr-4">
             <x-jet-secondary-button
                 disabled
@@ -48,13 +53,12 @@
         </div>
         <div class="flex-1">
             <x-button
-                x-bind:disabled="$wire:qty > $wire.quantity"
+                x-bind:disabled="$wire.qty > $wire.quantity"
                 x-bind:disabled="!$wire.quantity"
                 wire:click="addItem"
                 wire:loading.attr="disabled"
                 wire:target="addItem"
-                class="w-full"
-                color="orange">
+                class="w-full" color="orange">
                 Agregar al carrito de compras
             </x-button>
         </div>

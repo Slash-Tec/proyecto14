@@ -1,35 +1,9 @@
 <div>
-    <div class="grid grid-cols-5 gap-6 container-menu py-8">
-        <div class="col-span-3">
-            <div class="bg-white rounded-lg shadow-lg px-6 py-4 mb-6 flex items-center">
-                <p class="text-gray-700 uppercase"><span class="font-semibold">Número de Orden:</span>{{ $order->id }}</p>
+    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-5 gap-6 container-menu py-8">
+        <div class="order-2 lg:order-1 xl:col-span-3">
 
-                <form wire:submit.prevent="update">
-                    <div class="flex space-x-3 mt-2">
-                        <x-jet-label>
-                            <input wire:model="status" type="radio" name="status" value="2" class="mr-2">
-                            RECIBIDO
-                        </x-jet-label>
-                        <x-jet-label>
-                            <input wire:model="status" type="radio" name="status" value="3" class="mr-2">
-                            ENVIADO
-                        </x-jet-label>
-                        <x-jet-label>
-                            <input wire:model="status" type="radio" name="status" value="4" class="mr-2">
-                            ENTREGADO
-                        </x-jet-label>
-                        <x-jet-label>
-                            <input wire:model="status" type="radio" name="status" value="5" class="mr-2">
-                            ANULADO
-                        </x-jet-label>
-                    </div>
-
-                    <div class="flex mt-2">
-                        <x-jet-button class="ml-auto">
-                            Actualizar
-                        </x-jet-button>
-                    </div>
-                </form>
+            <div class="bg-white rounded-lg shadow-lg px-6 py-4 mb-6">
+                <p class="text-gray-700 uppercase"><span class="font-semibold">Número de Orden:</span> {{ $order->id }}</p>
             </div>
 
             <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
@@ -105,16 +79,16 @@
             </div>
         </div>
 
-        <div class="col-span-2">
+        <div class="order-1 lg:order-2 xl:col-span-2">
             <div class="bg-white rounded-lg shadow-lg px-6 pt-6">
                 <div class="flex justify-between items-center mb-4">
-                    <img class="h-8" src="{{asset('img/MC_VI_DI_2-1.jpg')}}" alt="">
+                    <img class="h-8" src="{{ asset('img/MC_VI_DI_2-1.jpg') }}" alt="">
                     <div class="text-gray-700">
                         <p class="text-sm font-semibold">
-                            Subtotal: {{$order->total - $order->shipping_cost}} &euro;
+                            Subtotal: {{ $order->total - $order->shipping_cost }} &euro;
                         </p>
                         <p class="text-sm font-semibold">
-                            Envio: {{ $order->shipping_cost }} &euro;
+                            Envío: {{ $order->shipping_cost }} &euro;
                         </p>
                         <p class="text-lg font-semibold uppercase">
                             Pago: {{ $order->total }} &euro;
@@ -126,12 +100,13 @@
             </div>
         </div>
     </div>
+
     @push('scripts')
         <script src="https://www.paypal.com/sdk/js?client-id={{ config('services.paypal.client_id') }}&currency=EUR"></script>
 
         <script>
             paypal.Buttons({
-                createOrder: function(data, actions){
+                createOrder: function(data, actions) {
                     return actions.order.create({
                         purchase_units: [{
                             amount: {
@@ -140,9 +115,9 @@
                         }]
                     });
                 },
-                onApprove: function(data, actions){
+                onApprove: function(data, actions) {
                     return actions.order.capture().then(function(orderData) {
-                        Livewire.emit('payOrder');
+                        Livewire.emit('payOrder')
                     });
                 }
             }).render('#paypal-button-container');

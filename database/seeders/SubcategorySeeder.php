@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Subcategory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use Str;
 
 class SubcategorySeeder extends Seeder
 {
@@ -21,7 +20,7 @@ class SubcategorySeeder extends Seeder
             [
                 'category_id' => 1,
                 'name' => 'Celulares y smartphones',
-                'slug' => Str::slug('celulares y smartphones'),
+                'slug' => Str::slug('Celulares y smartphones'),
                 'color' => true
             ],
             [
@@ -119,7 +118,8 @@ class SubcategorySeeder extends Seeder
             ],
         ];
 
-        foreach ($subcategories as $subcategory){
+        foreach ($subcategories as $subcategory)
+        {
             Subcategory::create($subcategory);
         }
     }

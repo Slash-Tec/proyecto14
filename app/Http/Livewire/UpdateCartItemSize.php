@@ -4,7 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Color;
 use App\Models\Size;
-use Cart;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Livewire\Component;
 
 class UpdateCartItemSize extends Component

@@ -22,21 +22,21 @@ class BrandComponent extends Component
         'createForm.name' => 'required'
     ];
 
-    protected $listeners = ['delete'];
-
     protected $validationAttributes = [
         'createForm.name' => 'nombre',
         'editForm.name' => 'nombre'
     ];
 
-    public function getBrands()
-    {
-        $this->brands = Brand::all();
-    }
+    protected $listeners = ['delete'];
 
     public function mount()
     {
         $this->getBrands();
+    }
+
+    public function getBrands()
+    {
+        $this->brands = Brand::all();
     }
 
     public function save()

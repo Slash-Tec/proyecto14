@@ -21,12 +21,15 @@
                         Nombre
                     </x-jet-label>
 
-                    <x-jet-input wire:model.defer="createForm.name" type="text" class="w-full mt-1"/>
-                    <x-jet-input-error for="createForm.name"/>
+                    <x-jet-input wire:model.defer="createForm.name" type="text" class="w-full mt-1" />
+
+                    <x-jet-input-error for="createForm.name" />
                 </div>
+
             </x-slot>
 
             <x-slot name="actions">
+
                 <x-jet-action-message class="mr-3" on="saved">
                     Distrito agregado
                 </x-jet-action-message>
@@ -56,7 +59,7 @@
                     </thead>
 
                     <tbody class="divide-y divide-gray-300">
-                    @foreach($districts as $district)
+                    @foreach ($districts as $district)
                         <tr>
                             <td class="py-2">
                                 {{$district->name}}
@@ -64,7 +67,7 @@
                             <td class="py-2">
                                 <div class="flex divide-x divide-gray-300 font-semibold">
                                     <a class="pr-2 hover:text-blue-600 cursor-pointer" wire:click="edit({{$district}})">Editar</a>
-                                    <a class="pl-2 hover:text-red-600 cursor-pointer" wire:click="$emit('deleteDistrict', {{$district->id}})">Eliminar</a>
+                                    <a class="pl-2 hover:text-red-600 cursor-pointer" wire:click="$emit('deleteDistrict', {{ $district->id }})">Eliminar</a>
                                 </div>
                             </td>
                         </tr>
@@ -77,7 +80,7 @@
 
         <x-jet-dialog-modal wire:model="editForm.open">
             <x-slot name="title">
-                Eliminar distrito
+                Editar distrito
             </x-slot>
 
             <x-slot name="content">
@@ -87,8 +90,9 @@
                             Nombre
                         </x-jet-label>
 
-                        <x-jet-input wire:model="editForm.name" type="text" class="w-full mt-1"/>
-                        <x-jet-input-error for="editForm.name"/>
+                        <x-jet-input wire:model="editForm.name" type="text" class="w-full mt-1" />
+
+                        <x-jet-input-error for="editForm.name" />
                     </div>
                 </div>
             </x-slot>
@@ -113,7 +117,7 @@
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
-                    if (result.isConfirmed){
+                    if (result.isConfirmed) {
                         Livewire.emitTo('admin.show-city', 'delete', districtId)
                         Swal.fire(
                             'Deleted!',
@@ -126,3 +130,4 @@
         </script>
     @endpush
 </div>
+

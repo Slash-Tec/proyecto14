@@ -2,16 +2,15 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Models\Order;
 use Livewire\Component;
 
 class StatusOrder extends Component
 {
     public $order, $status;
 
-    public function show(Order $order)
+    public function mount()
     {
-        return view('admin.orders.show', compact('order'));
+        $this->status = $this->order->status;
     }
 
     public function update()
@@ -19,11 +18,6 @@ class StatusOrder extends Component
         $this->order->status = $this->status;
 
         $this->order->save();
-    }
-
-    public function mount()
-    {
-        $this->status = $this->order->status;
     }
 
     public function render()

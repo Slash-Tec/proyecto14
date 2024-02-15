@@ -43,7 +43,9 @@ class DepartmentComponent extends Component
         Department::create($this->createForm);
 
         $this->reset('createForm');
+
         $this->getDepartments();
+
         $this->emit('saved');
     }
 
@@ -62,6 +64,7 @@ class DepartmentComponent extends Component
         $this->reset('editForm');
         $this->getDepartments();
     }
+
 
     public function delete(Department $department)
     {

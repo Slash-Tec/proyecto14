@@ -3,8 +3,8 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Color;
-use Livewire\Component;
 use App\Models\ColorSize as TbPivot;
+use Livewire\Component;
 
 class ColorSize extends Component
 {
@@ -12,26 +12,36 @@ class ColorSize extends Component
     public $color_id, $quantity;
     public $pivot, $open = false, $pivot_color_id, $pivot_quantity;
 
-    protected $listeners = ['delete'];
     protected $rules = [
         'color_id' => 'required',
         'quantity' => 'required|numeric'
     ];
 
+    protected $listeners = ['delete'];
+
     public function mount()
     {
-        $this->colors =Color::all();
+        $this->colors = Color::all();
     }
 
     public function save()
     {
         $this->validate();
 
-        $this->size->colors()->attach([
-           $this->color_id => [
-               'quantity' => $this->quantity,
-           ],
-        ]);
+        $pivot = TbPivot::where('color_id', $this->color_id)
+            ->where('size_id', $this->size->id)
+            ->first();
+
+        if ($pivot) {
+            $pivot->quantity += $this->quantity;
+            $pivot->save();
+        } else {
+            $this->size->colors()->attach([
+                $this->color_id => [
+                    'quantity' => $this->quantity,
+                ],
+            ]);
+        }
 
         $this->reset(['color_id', 'quantity']);
 
@@ -43,9 +53,6 @@ class ColorSize extends Component
     public function edit(TbPivot $pivot)
     {
         $this->pivot = $pivot;
-        $this->open = true;
-        $this->pivot_color_id = $pivot->color_id;
-        $this->pivot_quantity = $pivot->quantity;
     }
 
     public function update()

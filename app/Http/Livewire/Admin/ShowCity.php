@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\City;
+use App\Models\District;
 use Livewire\Component;
 
 class ShowCity extends Component
@@ -44,7 +45,9 @@ class ShowCity extends Component
         $this->city->districts()->create($this->createForm);
 
         $this->reset('createForm');
+
         $this->getDistricts();
+
         $this->emit('saved');
     }
 

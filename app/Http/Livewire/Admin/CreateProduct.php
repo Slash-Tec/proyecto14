@@ -12,6 +12,10 @@ use Livewire\Component;
 
 class CreateProduct extends Component
 {
+    public $categories, $subcategories = [], $brands = [];
+    public $category_id = '', $subcategory_id = '', $brand_id = '';
+    public $name, $slug, $description, $price, $quantity;
+
     protected $rules = [
         'category_id' => 'required',
         'subcategory_id' => 'required',
@@ -22,10 +26,6 @@ class CreateProduct extends Component
         'price' => 'required',
     ];
 
-    public $categories, $subcategories = [], $brands = [];
-    public $category_id = '', $subcategory_id = '', $brand_id = '';
-    public $name, $slug, $description, $price;
-
     public function mount()
     {
         $this->categories = Category::all();
@@ -35,7 +35,7 @@ class CreateProduct extends Component
     {
         $this->subcategories = Subcategory::where('category_id', $value)->get();
 
-        $this->brands = Brand::whereHas('categories', function(Builder $query)use ($value){
+        $this->brands = Brand::whereHas('categories', function(Builder $query) use ($value) {
             $query->where('category_id', $value);
         })->get();
 
@@ -53,7 +53,7 @@ class CreateProduct extends Component
 
     public function save()
     {
-        if($this->subcategory_id && !$this->subcategory->color && !$this->subcategory->size){
+        if ($this->subcategory_id && !$this->subcategory->color && !$this->subcategory->size) {
             $this->rules['quantity'] = 'required';
         }
 
@@ -67,7 +67,7 @@ class CreateProduct extends Component
         $product->price = $this->price;
         $product->subcategory_id = $this->subcategory_id;
         $product->brand_id = $this->brand_id;
-        if ($this->subcategory_id && !$this->subcategory->color && !$this->subcategory->size){
+        if ($this->subcategory_id && !$this->subcategory->color && !$this->subcategory->size) {
             $product->quantity = $this->quantity;
         }
 
@@ -78,7 +78,6 @@ class CreateProduct extends Component
 
     public function render()
     {
-        return view('livewire.admin.create-product')
-            ->layout('layouts.admin');
+        return view('livewire.admin.create-product')->layout('layouts.admin');
     }
 }

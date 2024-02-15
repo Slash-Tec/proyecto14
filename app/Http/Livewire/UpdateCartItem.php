@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use Cart;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Livewire\Component;
 
 class UpdateCartItem extends Component
@@ -13,7 +13,7 @@ class UpdateCartItem extends Component
     public function mount()
     {
         $item = Cart::get($this->rowId);
-        $item->qty = $item->qty;
+        $this->qty = $item->qty;
         $this->quantity = qty_available($item->id);
     }
 

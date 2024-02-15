@@ -6,7 +6,7 @@
             </x-jet-label>
 
             <div class="grid grid-cols-6 gap-6">
-                @foreach($colors as $color)
+                @foreach ($colors as $color)
                     <label>
                         <input type="radio" name="color_id" wire:model.defer="color_id" value="{{ $color->id }}">
                         <span class="ml-2 text-gray-700 capitalize">
@@ -16,7 +16,7 @@
                 @endforeach
             </div>
 
-            <x-jet-input-error for="color_id"/>
+            <x-jet-input-error for="color_id" />
         </div>
 
         <div>
@@ -24,7 +24,7 @@
                 Cantidad
             </x-jet-label>
 
-            <x-jet-input type="number" wire:model.defer="quantity" placeholder="Ingrese una cantidad" class="w-full"/>
+            <x-jet-input type="number" wire:model.defer="quantity" placeholder="Ingrese una cantidad" class="w-full" />
 
             <x-jet-input-error for="quantity" />
         </div>
@@ -85,6 +85,7 @@
             </table>
         </div>
     @endif
+
     <x-jet-dialog-modal wire:model="open">
         <x-slot name="title">
             Editar colores
@@ -107,13 +108,15 @@
                     Cantidad
                 </x-jet-label>
                 <x-jet-input class="w-full" wire:model="pivot_quantity" type="number"
-                             placeholder="Ingrese una cantidad"/>
+                             placeholder="Ingrese una cantidad" />
             </div>
         </x-slot>
+
         <x-slot name="footer">
             <x-jet-secondary-button wire:click="$set('open', false)">
                 Cancelar
             </x-jet-secondary-button>
+
             <x-jet-button wire:click="update" wire:loading.attr="disabled" wire:target="update">
                 Actualizar
             </x-jet-button>

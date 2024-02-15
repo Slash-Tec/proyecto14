@@ -15,19 +15,14 @@
         <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
         <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/dist/sweetalert2.css') }}">
         <link rel="stylesheet" href="{{ asset('vendor/dropzone/dist/dropzone.css') }}">
-        {{--<link rel="stylesheet" href="{{ asset('vendor/glider-js/glider.min.js') }}">
-        <link rel="stylesheet" href="{{ asset('vendor/flex-slider/flexslider.css') }}">--}}
 
         @livewireStyles
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
-        <script src="{{ asset('vendor/ckeditor5/build/ckeditor.js') }}"></script>
+        <script src="{{ asset('vendor/ckeditor/build/ckeditor.js') }}"></script>
         <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.js') }}"></script>
         <script src="{{ asset('vendor/dropzone/dist/dropzone.js') }}"></script>
-        {{--<script src="{{ asset('vendor/glider-js/glider.min.js') }}"></script>
-        <script src="{{ asset('vendor/flex-slider/node_modules/jquery/dist/jquery.js') }}"></script>
-        <script src="{{ asset('vendor/flex-slider/jquery.flexslider-min.js') }}"></script>--}}
 
     </head>
     <body class="font-sans antialiased">
@@ -53,27 +48,6 @@
         @stack('modals')
 
         @livewireScripts
-
-        <script>
-            function dropdown(){
-                return {
-                    open: false,
-                    show(){
-                        if(this.open) {
-                            this.open = false;
-                            document.getElementsByTagName('html')[0].style.overflow = 'auto'
-                        }else{
-                            this.open = true;
-                            document.getElementsByTagName('html')[0].style.overflow = 'hidden'
-                        }
-                    },
-                    close(){
-                        this.open = false;
-                        document.getElementsByTagName('html')[0].style.overflow = 'auto'
-                    }
-                }
-            }
-        </script>
 
         @stack('scripts')
     </body>

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use Faker\Generator;
 use Illuminate\Support\ServiceProvider;
+use Mmo\Faker\PicsumProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $faker = $this->app->make(Generator::class);
+        $faker->addProvider(new PicsumProvider($faker));
     }
 }

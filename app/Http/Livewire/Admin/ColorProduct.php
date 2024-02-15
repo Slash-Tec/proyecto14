@@ -3,8 +3,8 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Color;
-use Livewire\Component;
 use App\Models\ColorProduct as TbPivot;
+use Livewire\Component;
 
 class ColorProduct extends Component
 {
@@ -32,7 +32,7 @@ class ColorProduct extends Component
             ->where('product_id', $this->product->id)
             ->first();
 
-        if ($pivot){
+        if ($pivot) {
             $pivot->quantity += $this->quantity;
             $pivot->save();
         } else {
@@ -74,6 +74,7 @@ class ColorProduct extends Component
     {
         $pivot->delete();
         $this->product = $this->product->fresh();
+
     }
 
     public function render()
@@ -81,5 +82,6 @@ class ColorProduct extends Component
         $productColors = $this->product->colors;
 
         return view('livewire.admin.color-product', compact('productColors'));
+
     }
 }

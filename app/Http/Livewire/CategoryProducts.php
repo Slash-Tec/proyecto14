@@ -14,8 +14,9 @@ class CategoryProducts extends Component
     {
         $this->products = $this->category->products()->where('status', 2)->take(15)->get();
 
-        $this->emit('glider, $this->category->id');
+        $this->emit('glider', $this->category->id);
     }
+
 
     public function render()
     {

@@ -16,7 +16,7 @@ class ColorSizeSeeder extends Seeder
     {
         $sizes = Size::all();
 
-        foreach ($sizes as $size){
+        foreach ($sizes as $size) {
             $size->colors()
                 ->attach([
                     1 => ['quantity' => 10],
@@ -25,5 +25,6 @@ class ColorSizeSeeder extends Seeder
                     4 => ['quantity' => 10]
                 ]);
         }
+
     }
 }

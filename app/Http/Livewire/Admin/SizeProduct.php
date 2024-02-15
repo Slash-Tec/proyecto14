@@ -4,18 +4,18 @@ namespace App\Http\Livewire\Admin;
 
 use App\Models\Size;
 use Livewire\Component;
-use App\Models\ColorSize as TbPivot;
 
 class SizeProduct extends Component
 {
     public $product, $name, $size;
-    public $open=false;
+    public $open = false;
     public $name_edit;
 
-    protected $listeners = ['delete'];
     protected $rules = [
         'name' => 'required'
     ];
+
+    protected $listeners = ['delete'];
 
     public function save()
     {
@@ -47,7 +47,7 @@ class SizeProduct extends Component
     public function update()
     {
         $this->validate([
-           'name_edit' => 'required',
+            'name_edit' => 'required',
         ]);
 
         $this->size->name = $this->name_edit;
@@ -69,5 +69,6 @@ class SizeProduct extends Component
         $sizes = $this->product->sizes;
 
         return view('livewire.admin.size-product', compact('sizes'));
+
     }
 }

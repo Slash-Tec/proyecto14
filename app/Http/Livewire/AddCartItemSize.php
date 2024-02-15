@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Size;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 
@@ -23,12 +24,22 @@ class AddCartItemSize extends Component
         $this->options['image'] = Storage::url($this->product->images->first()->url);
     }
 
+    public function decrement()
+    {
+        $this->qty--;
+    }
+
+    public function increment()
+    {
+        $this->qty++;
+    }
+
     public function updatedSizeId($value)
     {
         $size = Size::find($value);
         $this->colors = $size->colors;
         $this->options['size'] = $size->name;
-        $this->options['color_id'] = $size->id;
+        $this->options['size_id'] = $size->id;
     }
 
     public function updatedColorId($value)
@@ -40,19 +51,9 @@ class AddCartItemSize extends Component
         $this->options['color_id'] = $color->id;
     }
 
-    public function decrement()
-    {
-        $this->qty--;
-    }
-
-    public function increment()
-    {
-        $this->qty++;
-    }
-
     public function addItem()
     {
-        Cart:add([
+        Cart::add([
             'id' => $this->product->id,
             'name' => $this->product->name,
             'qty' => $this->qty,

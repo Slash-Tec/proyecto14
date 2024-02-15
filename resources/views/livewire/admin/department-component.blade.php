@@ -5,7 +5,7 @@
         </x-slot>
 
         <x-slot name="description">
-            Complete la información necesaria para poder agregar un nuevi departamento
+            Complete la información necesaria para poder agregar un nuevo departamento
         </x-slot>
 
         <x-slot name="form">
@@ -14,8 +14,9 @@
                     Nombre
                 </x-jet-label>
 
-                <x-jet-input wire:model.defer="createForm.name" type="text" class="w-full mt-1"/>
-                <x-jet-input-error for="createForm.name"/>
+                <x-jet-input wire:model.defer="createForm.name" type="text" class="w-full mt-1" />
+
+                <x-jet-input-error for="createForm.name" />
             </div>
         </x-slot>
 
@@ -36,7 +37,7 @@
         </x-slot>
 
         <x-slot name="description">
-            Aqui encontrará todos los departamentos
+            Aquí encontrará todas los departamentos
         </x-slot>
 
         <x-slot name="content">
@@ -49,7 +50,7 @@
                 </thead>
 
                 <tbody class="divide-y divide-gray-300">
-                @foreach($departments as $department)
+                @foreach ($departments as $department)
                     <tr>
                         <td class="py-2">
                             <a href="{{route('admin.departments.show', $department)}}" class="uppercase underline hover:text-blue-600">
@@ -82,8 +83,9 @@
                         Nombre
                     </x-jet-label>
 
-                    <x-jet-input wire:model="editForm.name" type="text" class="w-full mt-1"/>
-                    <x-jet-input-error for="editForm.name"/>
+                    <x-jet-input wire:model="editForm.name" type="text" class="w-full mt-1" />
+
+                    <x-jet-input-error for="editForm.name" />
                 </div>
             </div>
         </x-slot>

@@ -7,16 +7,8 @@ use Illuminate\Http\Request;
 
 class ProductsController extends Controller
 {
-    public function files(Product $product, Request $request)
+    public function show(Product $product)
     {
-        $request->validate([
-            'file' => 'required|image|max:2048'
-        ]);
-
-        $url = $request->file('file')->store('products', 'public');
-
-        $product->images()->create([
-            'url' => $url
-        ]);
+        return view('products.show', compact('product'));
     }
 }

@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Subcategory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class EditProduct extends Component
@@ -16,7 +17,6 @@ class EditProduct extends Component
     public $product, $categories, $subcategories, $brands;
     public $category_id;
 
-    protected $listeners = ['refreshProduct', 'delete'];
     protected $rules = [
         'category_id' => 'required',
         'product.subcategory_id' => 'required',
@@ -25,8 +25,10 @@ class EditProduct extends Component
         'product.description' => 'required',
         'product.brand_id' => 'required',
         'product.price' => 'required',
-        'product.quantity' => 'numeric',
+        'product.quantity' => '',
     ];
+
+    protected $listeners = ['refreshProduct', 'delete'];
 
     public function mount(Product $product)
     {
@@ -37,21 +39,16 @@ class EditProduct extends Component
 
         $this->subcategories = Subcategory::where('category_id', $this->category_id)->get();
 
-        $this->brands = Brand::whereHas('categories', function(Builder $query){
+        $this->brands = Brand::whereHas('categories', function(Builder $query) {
             $query->where('category_id', $this->category_id);
         })->get();
-    }
-
-    public function getSubcategoryProperty()
-    {
-        return Subcategory::find($this->product->subcategory_id);
     }
 
     public function updatedCategoryId($value)
     {
         $this->subcategories = Subcategory::where('category_id', $value)->get();
 
-        $this->brands = Brand::whereHas('categories', function(Builder $query)use ($value){
+        $this->brands = Brand::whereHas('categories', function(Builder $query) use ($value) {
             $query->where('category_id', $value);
         })->get();
 
@@ -59,13 +56,22 @@ class EditProduct extends Component
         $this->product->brand_id = '';
     }
 
+    public function updatedProductName($value){
+        $this->product->slug = Str::slug($value);
+    }
+
+    public function getSubcategoryProperty()
+    {
+        return Subcategory::find($this->product->subcategory_id);
+    }
+
     public function save()
     {
-        $this->rules['product.slug'] = 'required|unique:products.slug' . $this->product->id;
+        $this->rules['product.slug'] = 'required|unique:products,slug,' . $this->product->id;
 
-        if ($this->product->subcategory_id){
-            if (!$this->subcategory->color && !$this->subcategory->size){
-                $this->rules['product.quantity'] = 'required|numeric';
+        if ($this->product->subcategory_id) {
+            if (!$this->subcategory->color && !$this->subcategory->size) {
+                $this->rules['product.quantity'] = 'required';
             }
         }
 
@@ -106,4 +112,5 @@ class EditProduct extends Component
     {
         return view('livewire.admin.edit-product')->layout('layouts.admin');
     }
+
 }
