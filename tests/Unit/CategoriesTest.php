@@ -14,7 +14,7 @@ class CategoriesTest extends TestCase
     /** @test */
     public function it_shows_a_category()
     {
-        $category = Category::create([
+        $category = Category::factory()->create([
             'name' => 'Consola y videojuegos',
             'slug' => 'consola-y-videojuegos',
             'icon' => '<i class="fas fa-gamepad"></i>',
@@ -30,13 +30,13 @@ class CategoriesTest extends TestCase
     /** @test */
     public function it_shows_subcategory_filters_for_nintendo()
     {
-        $category = Category::create([
+        $category = Category::factory()->create([
             'name' => 'Consola y videojuegos',
             'slug' => 'consola-y-videojuegos',
             'icon' => '<i class="fas fa-gamepad"></i>',
         ]);
 
-        $subcategoryNintendo = Subcategory::create([
+        $subcategory = Subcategory::factory()->create([
             'name' => 'Nintendo',
             'slug' => 'nintendo',
             'color' => 0,
@@ -44,11 +44,11 @@ class CategoriesTest extends TestCase
             'category_id' => $category->id,
         ]);
 
-        $response = $this->get('/categories/' . $category->slug . '?subcategory=' . $subcategoryNintendo->slug);
+        $response = $this->get('/categories/' . $category->slug . '?subcategory=' . $subcategory->slug);
 
         $response->assertStatus(200);
 
-        $response->assertSee($subcategoryNintendo->name);
+        $response->assertSee($subcategory->name);
     }
 }
 
