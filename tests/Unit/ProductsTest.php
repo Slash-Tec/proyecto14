@@ -17,7 +17,6 @@ class ProductsTest extends TestCase
             'name' => 'Consola y videojuegos',
             'slug' => 'consola-y-videojuegos',
             'icon' => '<i class="fas fa-gamepad"></i>',
-            'image' => '../example.jpg',
         ]);
 
         $subcategory = Subcategory::factory()->create([
