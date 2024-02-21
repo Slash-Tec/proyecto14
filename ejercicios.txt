@@ -1,20 +1,20 @@
 Semana 1
 
-1
-2
-3
-4
+1-
+2-Por arreglar
+3-Por comprobar
+4-Por comprobar
 
 Semana 2
 
 
 1
-2
-3
-4
-5
-6
-7
+2-Por comprobar
+3-Por comprobar
+4-Por comprobar
+5-Por comprobar
+6-Por comprobar
+7-Por comprobar
 8
 9
 
