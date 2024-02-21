@@ -11,7 +11,7 @@ class IndexTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function it_shows_index_products()
+    public function it_shows_five_index_products()
     {
         $category = Category::factory()->create([
             'name' => 'Consola y videojuegos',

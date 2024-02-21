@@ -13,31 +13,24 @@ class ProductsTest extends TestCase
     /** @test */
     public function it_shows_product_details()
     {
-        $category = Category::factory()->create([
-            'name' => 'Consola y videojuegos',
-            'slug' => 'consola-y-videojuegos',
-            'icon' => '<i class="fas fa-gamepad"></i>',
-        ]);
-
-        $subcategory = Subcategory::factory()->create([
-            'name' => 'Nintendo',
-            'slug' => 'nintendo',
-            'color' => 0,
-            'size' => 0,
-            'category_id' => $category->id,
-        ]);
-
-        $product = Product::factory()->create([
-            'name' => 'Mario',
-            'slug' => 'Mario',
+        $product = Product::create([
+            'name' => 'NEO The World Ends With You',
+            'slug' => 'neo',
+            'image' => '../example.jpg',
             'description' => 'Descripción del producto',
-            'subcategory_id' => $subcategory->id,
-            'status' => '2',
+            'price' => 19.99,
+            'stock' => 10,
         ]);
 
         $response = $this->get('/products/' . $product->slug);
         $response->assertStatus(200);
+
         $response->assertSee($product->name);
         $response->assertSee($product->description);
+        $response->assertSee(number_format($product->price, 2));
+        $response->assertSee('Stock disponible: ' . $product->stock);
+        $response->assertSee('<button id="btn-add-to-cart">Agregar al carrito de compras</button>');
+        $response->assertSee('<button id="btn-increase-quantity">+</button>');
+        $response->assertSee('<button id="btn-decrease-quantity">-</button>');
     }
 }
