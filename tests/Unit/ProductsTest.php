@@ -1,9 +1,13 @@
 <?php
 
 use App\Http\Livewire\AddCartItem;
+use App\Http\Livewire\AddCartItemColor;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Color;
+use App\Models\Image;
 use App\Models\Product;
+use App\Models\Size;
 use App\Models\Subcategory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
@@ -155,6 +159,135 @@ class ProductsTest extends TestCase
             ->assertDontSee('<button class="btn btn-primary" id="btn-decrease-quantity" disabled>-</button>');
     }
 
-    /*public function it_checks_products_with_color*/
+
+    /** @test */
+    public function it_checks_products_with_color()
+    {
+        $category = Category::create([
+            'name' => 'Ropa',
+            'slug' => 'ropa',
+            'icon' => '<i class="fas fa-tshirt"></i>',
+            'image' => 'tests/example.jpg',
+        ]);
+
+        $subcategory = Subcategory::create([
+            'name' => 'Camisetas',
+            'slug' => 'camisetas',
+            'category_id' => $category->id,
+        ]);
+
+        $brand = Brand::create([
+            'name' => 'Zara',
+            'slug' => 'zara',
+            'category_id' => $category->id,
+        ]);
+
+        $product = Product::create([
+            'name' => 'Camiseta de algodón',
+            'slug' => 'camiseta-algodon',
+            'description' => 'Camiseta cómoda de algodón',
+            'price' => 29.99,
+            'stock' => 30,
+            'subcategory_id' => $subcategory->id,
+            'brand_id' => $brand->id,
+        ]);
+
+        Image::create([
+            'url' => 'ruta/de/tu/imagen.jpg',
+            'imageable_type' => Product::class,
+            'imageable_id' => $product->id,
+        ]);
+
+        $colors = [
+            'Rojo',
+            'Azul',
+            'Verde',
+        ];
+
+        foreach ($colors as $colorName) {
+            $color = Color::create(['name' => $colorName]);
+            $product->colors()->attach($color->id, ['quantity' => 10]);
+        }
+
+        $availableColors = Color::all();
+
+        Livewire::test(AddCartItemColor::class, ['product' => $product, 'colors' => $availableColors])
+            ->set('color_id', $availableColors[0]->id)
+            ->assertSee($availableColors[0]->name)
+            ->assertSee($availableColors[1]->name)
+            ->assertSee($availableColors[2]->name);
+    }
+
+    public function it_checks_products_with_size()
+    {
+        $category = Category::create([
+            'name' => 'Ropa',
+            'slug' => 'ropa',
+            'icon' => '<i class="fas fa-tshirt"></i>',
+            'image' => 'tests/example.jpg',
+        ]);
+
+        $subcategory = Subcategory::create([
+            'name' => 'Camisetas',
+            'slug' => 'camisetas',
+            'category_id' => $category->id,
+        ]);
+
+        $brand = Brand::create([
+            'name' => 'Zara',
+            'slug' => 'zara',
+            'category_id' => $category->id,
+        ]);
+
+        $product = Product::create([
+            'name' => 'Camiseta de algodón',
+            'slug' => 'camiseta-algodon',
+            'description' => 'Camiseta cómoda de algodón',
+            'price' => 29.99,
+            'stock' => 30,
+            'subcategory_id' => $subcategory->id,
+            'brand_id' => $brand->id,
+        ]);
+
+        Image::create([
+            'url' => 'ruta/de/tu/imagen.jpg',
+            'imageable_type' => Product::class,
+            'imageable_id' => $product->id,
+        ]);
+
+        $colors = [
+            'Rojo',
+            'Azul',
+            'Verde',
+        ];
+
+        foreach ($colors as $colorName) {
+            $color = Color::create(['name' => $colorName]);
+            $product->colors()->attach($color->id, ['quantity' => 10]);
+        }
+
+        $sizes = [
+            'S',
+            'M',
+            'L',
+        ];
+
+        foreach ($sizes as $sizeName) {
+            $size = Size::create(['name' => $sizeName]);
+            $product->sizes()->attach($size->id, ['quantity' => 10]);
+        }
+
+        $availableColors = Color::all();
+        $availableSizes = Size::all();
+
+        Livewire::test(AddCartItemColor::class, ['product' => $product, 'colors' => $availableColors])
+            ->set('color_id', $availableColors[0]->id)
+            ->call('updatedColorId', $availableColors[0]->id)
+            ->set('size_id', $availableSizes[0]->id)
+            ->call('addItem')
+            ->assertEmitted('dropdown-cart', 'render')
+            ->assertSee($availableColors[0]->name)
+            ->assertSee($availableSizes[0]->name);
+    }
 
 }

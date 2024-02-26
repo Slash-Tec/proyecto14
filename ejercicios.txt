@@ -8,7 +8,7 @@ Semana 1
 Semana 2
 
 
-1
+1-Pasan las pruebas
 2-Pasan las pruebas
 3-Pasan las pruebas
 4-Pasan las pruebas
@@ -16,7 +16,7 @@ Semana 2
 6-Pasan las pruebas
 7-Pasan las pruebas
 8-Pasan las pruebas
-9
+9-Pasan las pruebas
 
 Semana 3
 
