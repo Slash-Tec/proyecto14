@@ -2,20 +2,20 @@ Semana 1
 
 1-
 2-Por arreglar
-3-Por comprobar
-4-Por comprobar
+3-Pasan las pruebas
+4-Pasan las pruebas
 
 Semana 2
 
 
 1
-2-Por comprobar
-3-Por comprobar
-4-Por comprobar
-5-Por comprobar
-6-Por comprobar
-7-Por comprobar
-8
+2-Pasan las pruebas
+3-Pasan las pruebas
+4-Pasan las pruebas
+5-Pasan las pruebas
+6-Pasan las pruebas
+7-Pasan las pruebas
+8-Pasan las pruebas
 9
 
 Semana 3
