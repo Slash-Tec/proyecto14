@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Models\Product;
 use Illuminate\Auth\Events\Logout;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -27,8 +28,19 @@ class MergeTheCartLogout
      */
     public function handle(Logout $event)
     {
-        Cart::erase(auth()->user()->id);
+        $user = auth()->user();
 
-        Cart::store(auth()->user()->id);
+        $cartContent = Cart::content();
+
+        foreach ($cartContent as $cartItem) {
+            $product = Product::find($cartItem->id);
+
+            if ($product) {
+                $product->increaseReserved($cartItem->qty); // Utiliza la función para incrementar
+            }
+        }
+
+        Cart::erase($user->id);
+        Cart::store($user->id);
     }
 }

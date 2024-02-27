@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Models\Product;
 use Illuminate\Auth\Events\Login;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -27,6 +28,18 @@ class MergeTheCart
      */
     public function handle(Login $event)
     {
-        Cart::merge(auth()->user()->id);
+        $user = auth()->user();
+
+        $cartContent = Cart::content();
+
+        foreach ($cartContent as $cartItem) {
+            $product = Product::find($cartItem->id);
+
+            if ($product) {
+                $product->increaseReserved($cartItem->qty);
+            }
+        }
+
+        Cart::merge($user->id);
     }
 }

@@ -13,7 +13,7 @@ class Product extends Model
     const BORRADOR = 1;
     const PUBLICADO = 2;
 
-    protected $fillable = ['name', 'slug', 'description', 'price', 'subcategory_id', 'brand_id', 'quantity'];
+    protected $fillable = ['name', 'slug', 'description', 'price', 'subcategory_id', 'brand_id', 'quantity', 'sold', 'reserved', 'status'];
     //protected $guarded = ['id', 'created_at', 'updated_at'];
 
     public function sizes(){
@@ -42,6 +42,21 @@ class Product extends Model
         return 'slug';
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updating(function ($product) {
+            $oldQuantity = $product->getOriginal('quantity');
+            $newQuantity = $product->quantity;
+
+            if ($newQuantity < $oldQuantity) {
+                $soldIncrement = $oldQuantity - $newQuantity;
+                $product->increment('sold', $soldIncrement);
+            }
+        });
+    }
+
     public function getStockAttribute(){
         if ($this->subcategory->size) {
             return  ColorSize::whereHas('size.product', function(Builder $query){
@@ -54,5 +69,15 @@ class Product extends Model
         } else {
             return $this->quantity;
         }
+    }
+
+    public function getSoldAttribute()
+    {
+        return $this->attributes['sold'] ?? 0;
+    }
+
+    public function increaseReserved($reservedQuantity)
+    {
+        $this->increment('reserved', $reservedQuantity);
     }
 }

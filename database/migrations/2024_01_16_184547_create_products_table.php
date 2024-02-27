@@ -32,6 +32,10 @@ class CreateProductsTable extends Migration
 
             $table->integer('quantity')->nullable();
 
+            $table->integer('sold')->nullable();
+
+            $table->integer('reserved')->nullable();
+
             $table->enum('status', [Product::BORRADOR, Product::PUBLICADO])->default(Product::BORRADOR);
 
             $table->timestamps();

@@ -30,6 +30,8 @@ class ProductFactory extends Factory
             'subcategory_id' => $subcategory->id,
             'brand_id' => $brand->id,
             'quantity'=> $subcategory->color ? null : 15,
+            'sold'=> $subcategory->color ? null : 15,
+            'reserved' => $subcategory->color ? null : 15,
             'status' => 2
         ];
     }
