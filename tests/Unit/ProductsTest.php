@@ -161,7 +161,7 @@ class ProductsTest extends TestCase
 
 
     /** @test */
-    public function it_checks_products_with_color()
+    public function it_checks_products_with_color($colors = [])
     {
         $category = Category::create([
             'name' => 'Ropa',
@@ -193,16 +193,10 @@ class ProductsTest extends TestCase
         ]);
 
         Image::create([
-            'url' => 'ruta/de/tu/imagen.jpg',
+            'url' => 'tests/example.jpg',
             'imageable_type' => Product::class,
             'imageable_id' => $product->id,
         ]);
-
-        $colors = [
-            'Rojo',
-            'Azul',
-            'Verde',
-        ];
 
         foreach ($colors as $colorName) {
             $color = Color::create(['name' => $colorName]);
@@ -218,7 +212,7 @@ class ProductsTest extends TestCase
             ->assertSee($availableColors[2]->name);
     }
 
-    public function it_checks_products_with_size()
+    public function it_checks_products_with_size($colors = [], $sizes = [])
     {
         $category = Category::create([
             'name' => 'Ropa',
@@ -250,27 +244,15 @@ class ProductsTest extends TestCase
         ]);
 
         Image::create([
-            'url' => 'ruta/de/tu/imagen.jpg',
+            'url' => 'tests/example.jpg',
             'imageable_type' => Product::class,
             'imageable_id' => $product->id,
         ]);
-
-        $colors = [
-            'Rojo',
-            'Azul',
-            'Verde',
-        ];
 
         foreach ($colors as $colorName) {
             $color = Color::create(['name' => $colorName]);
             $product->colors()->attach($color->id, ['quantity' => 10]);
         }
-
-        $sizes = [
-            'S',
-            'M',
-            'L',
-        ];
 
         foreach ($sizes as $sizeName) {
             $size = Size::create(['name' => $sizeName]);
