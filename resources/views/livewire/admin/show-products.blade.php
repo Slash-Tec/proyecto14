@@ -37,10 +37,10 @@
                                                 Estado
                                             </th>
                                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Vendidos
+                                                <a href="#" class="sortable-column" data-column="sold">Vendidos</a>
                                             </th>
                                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Reservado
+                                                <a href="#" class="sortable-column" data-column="reserved">Reservado</a>
                                             </th>
                                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Precio
@@ -107,3 +107,27 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sortableColumns = document.querySelectorAll('.sortable-column');
+
+        sortableColumns.forEach(column => {
+            column.addEventListener('click', () => {
+                const columnToSort = column.dataset.column;
+
+                const isAsc = !column.classList.contains('sorted') || column.classList.contains('desc');
+
+                Livewire.emit('sortBy', columnToSort, isAsc ? 'asc' : 'desc');
+
+                sortableColumns.forEach(otherColumn => {
+                    if (otherColumn !== column) {
+                        otherColumn.classList.remove('sorted', 'asc', 'desc');
+                    }
+                });
+
+                column.classList.add('sorted', isAsc ? 'asc' : 'desc');
+            });
+        });
+    });
+</script>
