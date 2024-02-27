@@ -1,0 +1,3 @@
+1-Si, solo he llegado a la semana 2, lo he intentado, de verdad que si, pero cada test
+individual se me atascaba, y por cada cabezazo que le diera al error seguia estando,
+era un milagro si solucionaba el error en el mismo dia.
