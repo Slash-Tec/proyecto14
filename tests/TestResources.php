@@ -4,7 +4,9 @@ namespace Tests;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
+use App\Models\Size;
 use App\Models\Subcategory;
 
 class TestResources
@@ -120,4 +122,156 @@ class TestResources
         return $twewy;
     }
 
+    public static function createHalo()
+    {
+        $category = Category::create([
+            'name' => 'Consola y videojuegos',
+            'slug' => 'consola-y-videojuegos',
+            'icon' => '<i class="fas fa-gamepad"></i>',
+            'image' => 'tests/example.jpg'
+        ]);
+
+        $subcategorysony = Subcategory::create([
+            'name' => 'Xbox',
+            'slug' => 'xbox',
+            'category_id' => $category->id,
+        ]);
+
+        $brandsquare = Brand::create([
+            'name' => 'Bungie',
+            'slug' => 'bungie',
+            'category_id' => $category->id,
+        ]);
+
+        $halo = Product::create([
+            'name' => 'Halo',
+            'slug' => 'halo',
+            'description' => 'Descripción del producto',
+            'price' => '19.99',
+            'subcategory_id' => $subcategorysony->id,
+            'brand_id' => $brandsquare->id,
+        ]);
+
+        $halo->images()->create([
+            'url' => 'tests/example.jpg',
+        ]);
+
+        return $halo;
+    }
+
+    public static function createMobile()
+    {
+        $category = Category::create([
+            'name' => 'Celulares y tablets',
+            'slug' => 'celulares-y-tablets',
+            'icon' => '<i class="fas fa-mobile"></i>',
+            'image' => 'tests/example.jpg'
+        ]);
+
+        $subcategorymobile = Subcategory::create([
+            'name' => 'Tablet',
+            'slug' => 'tablet',
+            'category_id' => $category->id,
+        ]);
+
+        $brandmobile = Brand::create([
+            'name' => 'Apple',
+            'slug' => 'apple',
+            'category_id' => $category->id,
+        ]);
+
+        $tablet = Product::create([
+            'name' => 'Tableta',
+            'slug' => 'tableta',
+            'description' => 'Descripción del producto',
+            'price' => '19.99',
+            'subcategory_id' => $subcategorymobile->id,
+            'brand_id' => $brandmobile->id,
+        ]);
+
+        $tablet->images()->create([
+            'url' => 'tests/example.jpg',
+            'imageable_type' => Product::class,
+            'imageable_id' => $tablet->id,
+        ]);
+
+        $colors = [
+            'Rojo',
+            'Azul',
+            'Verde',
+        ];
+
+        foreach ($colors as $colorName) {
+            $color = Color::create(['name' => $colorName]);
+            $tablet->colors()->attach($color->id, ['quantity' => 10]);
+        }
+
+        $availableColors = Color::all();
+
+        return $tablet;
+    }
+
+    public static function createShirt()
+    {
+        $category = Category::create([
+            'name' => 'Ropa',
+            'slug' => 'ropa',
+            'icon' => '<i class="fas fa-tshirt"></i>',
+            'image' => 'tests/example.jpg'
+        ]);
+
+        $subcategoryclothes = Subcategory::create([
+            'name' => 'Camiseta',
+            'slug' => 'camiseta',
+            'category_id' => $category->id,
+        ]);
+
+        $brandclothes = Brand::create([
+            'name' => 'Bungie',
+            'slug' => 'bungie',
+            'category_id' => $category->id,
+        ]);
+
+        $shirt = Product::create([
+            'name' => 'Camiseta',
+            'slug' => 'camiseta',
+            'description' => 'Descripción del producto',
+            'price' => '19.99',
+            'subcategory_id' => $subcategoryclothes->id,
+            'brand_id' => $brandclothes->id,
+        ]);
+
+        $shirt->images()->create([
+            'url' => 'tests/example.jpg',
+            'imageable_type' => Product::class,
+            'imageable_id' => $shirt->id,
+        ]);
+
+        $colors = [
+            'Rojo',
+            'Azul',
+            'Verde',
+        ];
+
+        foreach ($colors as $colorName) {
+            $color = Color::create(['name' => $colorName]);
+            $shirt->colors()->attach($color->id, ['quantity' => 10]);
+        }
+
+        $sizes = [
+            'S',
+            'M',
+            'L',
+        ];
+
+        foreach ($sizes as $sizeName) {
+            $size = Size::create(['name' => $sizeName, 'product_id' => $shirt->id]);
+            $shirt->sizes()->attach($size->id, ['quantity' => 10]);
+        }
+
+        $availableColors = Color::all();
+        $availableSizes = Size::all();
+
+        return $shirt;
+    }
 }
