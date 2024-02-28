@@ -16,3 +16,4 @@ class BrandSeeder extends Seeder
         //
     }
 }
+

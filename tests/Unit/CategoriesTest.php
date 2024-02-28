@@ -19,11 +19,10 @@ class CategoriesTest extends TestCase
     /** @test */
     public function it_shows_a_category()
     {
-        $category = Category::factory()->create([
-            'name' => 'Consola y videojuegos',
-            'slug' => 'consola-y-videojuegos',
-            'icon' => '<i class="fas fa-gamepad"></i>',
-        ]);
+        $createData = new CreateData();
+        $createData->generateCategoryData(1);
+
+        $category = Category::first();
 
         $response = $this->get('/categories/' . $category->slug);
 
@@ -35,19 +34,12 @@ class CategoriesTest extends TestCase
     /** @test */
     public function it_shows_subcategory_filters()
     {
-        $category = Category::factory()->create([
-            'name' => 'Consola y videojuegos',
-            'slug' => 'consola-y-videojuegos',
-            'icon' => '<i class="fas fa-gamepad"></i>',
-        ]);
+        $createData = new CreateData();
+        $createData->generateCategoryData(1);
+        $createData->generateSubcategoryData(1);
 
-        $subcategory = Subcategory::create([
-            'name' => 'Nintendo',
-            'slug' => 'nintendo',
-            'color' => 0,
-            'size' => 0,
-            'category_id' => $category->id,
-        ]);
+        $category = Category::first();
+        $subcategory = Subcategory::first();
 
         $response = $this->get('/categories/' . $category->slug . '?subcategory=' . $subcategory->slug);
 
@@ -65,6 +57,29 @@ class CategoriesTest extends TestCase
             ->call('limpiar')
             ->assertSee('The World Ends');
     }
+
+    /** @test */
+    /*public function it_shows_a_product_on_category_page()
+    {
+        $createData = new CreateData();
+        $createData->generateCategoryData(1);
+        $createData->generateSubcategoryData(1);
+
+        $category = Category::first();
+        $subcategory = Subcategory::first();
+
+        $brandData = $createData->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        $product = $createData->generateProductData(1, $subcategory, $brand);
+
+        $response = $this->get('/categories/' . $category->slug);
+
+        $response->assertStatus(200);
+
+        $response->assertSee($category->name);
+        $response->assertSee($product->name);
+    }*/
 
     /** @test */
     public function it_shows_brand_filters()
