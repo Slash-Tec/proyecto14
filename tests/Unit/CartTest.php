@@ -19,21 +19,18 @@ class CartTest extends TestCase
     /** @test */
     public function it_adds_multiple_items_to_cart_and_maintains_cart_after_login()
     {
-
         $halo = TestResources::createHalo();
         $mobile = TestResources::createMobile();
         $shirt = TestResources::createShirt();
 
-        $shirtId = $shirt->id;
-        $tabletId = $mobile->id;
-
         $sizes = ['S', 'M', 'L'];
 
         foreach ($sizes as $sizeName) {
-            $size = Size::create([
-                'name' => 'S',
-                'product_id' => $shirtId,
+            $size = Size::firstOrCreate([
+                'name' => $sizeName,
+                'product_id' => $shirt->id,
             ]);
+            $shirt->sizes()->attach($size->id, ['quantity' => 10]);
         }
 
         $colors = ['Rojo', 'Azul', 'Verde'];
@@ -49,6 +46,7 @@ class CartTest extends TestCase
                 'updated_at' => now(),
             ]);
         }
+
         Cart::add([
             'id' => $halo->id,
             'name' => $halo->name,
@@ -76,7 +74,7 @@ class CartTest extends TestCase
             'weight' => 550,
             'options' => [
                 'color_id' => $shirt->colors->first()->id,
-                'size_id' => $shirt->sizes->first()->id,
+                'size_id' => $sizes->first()->id, // Usar la primera talla
             ],
         ]);
 

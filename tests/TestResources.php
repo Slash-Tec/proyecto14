@@ -8,6 +8,7 @@ use App\Models\Color;
 use App\Models\Product;
 use App\Models\Size;
 use App\Models\Subcategory;
+use App\Models\User;
 
 class TestResources
 {
@@ -247,31 +248,42 @@ class TestResources
             'imageable_id' => $shirt->id,
         ]);
 
-        $colors = [
-            'Rojo',
-            'Azul',
-            'Verde',
-        ];
+        $colors = ['Rojo', 'Azul', 'Verde'];
 
         foreach ($colors as $colorName) {
             $color = Color::create(['name' => $colorName]);
             $shirt->colors()->attach($color->id, ['quantity' => 10]);
         }
 
-        $sizes = [
-            'S',
-            'M',
-            'L',
-        ];
+        $sizes = ['S', 'M', 'L'];
+        $sizeIds = [];
 
         foreach ($sizes as $sizeName) {
             $size = Size::create(['name' => $sizeName, 'product_id' => $shirt->id]);
-            $shirt->sizes()->attach($size->id, ['quantity' => 10]);
+
+            if ($size) {
+                $sizeIds[] = $size->id;
+                $shirt->sizes()->attach($size->id, ['quantity' => 10]);
+            } else {
+                \Illuminate\Support\Facades\Log::error('Error creando talla para la camiseta');
+            }
         }
 
         $availableColors = Color::all();
         $availableSizes = Size::all();
 
-        return $shirt;
+        return [
+            'shirt' => $shirt->fresh(),
+            'size_ids' => $sizeIds,
+        ];
+    }
+
+    public static function user()
+    {
+        $user = User::create([
+            'name' => 'pepe',
+            'email' => 'pepe@ejemplo.com',
+            'password' => bcrypt('123456'),
+        ]);
     }
 }
