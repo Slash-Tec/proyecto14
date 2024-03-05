@@ -5,100 +5,87 @@ namespace Tests\Unit;
 use App\Http\Livewire\CategoryFilter;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Image;
 use App\Models\Product;
 use App\Models\Subcategory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
+use Tests\CreateData;
 use Tests\TestCase;
 use Tests\TestResources;
 
 class CategoriesTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, CreateData;
 
     /** @test */
     public function it_shows_a_category()
     {
-        $createData = new CreateData();
-        $createData->generateCategoryData(1);
-
-        $category = Category::first();
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
 
         $response = $this->get('/categories/' . $category->slug);
 
         $response->assertStatus(200);
-
         $response->assertSee($category->name);
     }
 
     /** @test */
     public function it_shows_subcategory_filters()
     {
-        $createData = new CreateData();
-        $createData->generateCategoryData(1);
-        $createData->generateSubcategoryData(1);
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
 
-        $category = Category::first();
-        $subcategory = Subcategory::first();
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
 
-        $response = $this->get('/categories/' . $category->slug . '?subcategory=' . $subcategory->slug);
+        $response = $this->get('/categories/' . $category->slug . '?subcategoria=' . $subcategory->slug);
 
         $response->assertStatus(200);
-
         $response->assertSee($subcategory->name);
     }
 
     /** @test */
     public function it_shows_a_product_on_category_page()
     {
-        $twewy = TestResources::createTwewy();
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
 
-        Livewire::test(CategoryFilter::class, ['category' => $twewy->subcategory->category])
-            ->call('limpiar')
-            ->assertSee('The World Ends');
-    }
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
 
-    /** @test */
-    /*public function it_shows_a_product_on_category_page()
-    {
-        $createData = new CreateData();
-        $createData->generateCategoryData(1);
-        $createData->generateSubcategoryData(1);
-
-        $category = Category::first();
-        $subcategory = Subcategory::first();
-
-        $brandData = $createData->generateBrandData($category);
+        $brandData = $this->generateBrandData($category);
         $brand = Brand::create($brandData);
 
-        $product = $createData->generateProductData(1, $subcategory, $brand);
+        $productData = $this->generateProductData(1, $subcategory, $brand);
+        $product = Product::create($productData[0]);
+
+        $imageData = $this->generateImageData($product);
+        Image::create($imageData);
 
         $response = $this->get('/categories/' . $category->slug);
 
         $response->assertStatus(200);
-
         $response->assertSee($category->name);
         $response->assertSee($product->name);
-    }*/
+    }
 
     /** @test */
     public function it_shows_brand_filters()
     {
-        $category = Category::create([
-            'name' => 'Consola y videojuegos',
-            'slug' => 'consola-y-videojuegos',
-            'icon' => '<i class="fas fa-gamepad"></i>',
-            'image' => 'tests/example.jpg'
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
+
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        DB::table('brand_category')->insert([
+            'brand_id' => $brand->id,
+            'category_id' => $category->id,
         ]);
 
-        $brand = Brand::create([
-            'name' => 'Wii',
-            'slug' => 'wii',
-        ]);
-
-        $category->brands()->attach($brand->id);
-
-        $response = $this->get('/categories/' . $category->slug);
+        $response = $this->get('/categories/' . $category->slug . '?marca=' . substr($brand->name, 0, 3));
 
         $response->assertStatus(200);
         $response->assertSee($category->name);
@@ -108,33 +95,104 @@ class CategoriesTest extends TestCase
     /** @test **/
     public function it_uses_brand_filters()
     {
-        $xenoblade = TestResources::createXenoblade();
-        $hearts = TestResources::createHearts();
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
 
-        Livewire::test(CategoryFilter::class, ['category' => $hearts->subcategory->category, 'marca' => 'Square Enix'])
-            ->assertSee('Kingdom Hearts')
-            ->assertDontSee('Xenoblade Chronicles');
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
+
+        $brand1 = Brand::create($this->generateBrandData($category));
+        $brand2 = Brand::create($this->generateBrandData($category));
+
+        DB::table('brand_category')->insert([
+            'brand_id' => $brand1->id,
+            'category_id' => $category->id,
+        ]);
+
+        DB::table('brand_category')->insert([
+            'brand_id' => $brand2->id,
+            'category_id' => $category->id,
+        ]);
+
+        $product1 = Product::create($this->generateProductData(1, $subcategory, $brand1)[0]);
+        $product2 = Product::create($this->generateProductData(1, $subcategory, $brand2)[0]);
+
+        Image::create($this->generateImageData($product1));
+        Image::create($this->generateImageData($product2));
+
+        $response = $this->get('/categories/' . $category->slug . '?marca=' . urlencode($brand1->name));
+
+        $response->assertStatus(200);
+        $response->assertSee($category->name);
+        $response->assertSee($product1->name);
+        $response->assertDontSee($product2->name);
     }
 
     /** @test **/
     public function it_uses_subcategory_filters()
     {
-        $xenoblade = TestResources::createXenoblade();
-        $hearts = TestResources::createHearts();
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
 
-        Livewire::test(CategoryFilter::class, ['category' => $hearts->subcategory->category, 'subcategory' => 'Sony'])
-            ->assertSee('Kingdom Hearts')
-            ->assertDontSee('Xenoblade Chronicles');
+        $subcategory1Data = $this->generateSubcategoryData($category);
+        $subcategory1 = Subcategory::create($subcategory1Data);
+
+        $subcategory2Data = $this->generateSubcategoryData($category);
+        $subcategory2 = Subcategory::create($subcategory2Data);
+
+        $brand = Brand::create($this->generateBrandData($category));
+
+        $product1Data = $this->generateProductData(1, $subcategory1, $brand)[0];
+        $product1 = Product::create($product1Data);
+        Image::create($this->generateImageData($product1));
+
+        $product2Data = $this->generateProductData(1, $subcategory2, $brand)[0];
+        $product2 = Product::create($product2Data);
+        Image::create($this->generateImageData($product2));
+
+        $response = $this->get('/categories/' . $category->slug . '?subcategoria=' . urlencode($subcategory1->slug));
+
+        $response->assertStatus(200);
+        $response->assertSee($category->name);
+        $response->assertSee($product1->name);
+        $response->assertDontSee($product2->name);
     }
 
     /** @test **/
     public function it_uses_subcategory_and_brand_filters()
     {
-        $xenoblade = TestResources::createXenoblade();
-        $hearts = TestResources::createHearts();
-        Livewire::test(CategoryFilter::class, ['category' => $hearts->subcategory->category, 'subcategory' => 'Sony', 'marca' => 'Square Enix'])
-            ->assertSee('Kingdom Hearts')
-            ->assertDontSee('Xenoblade Chronicles');
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
+
+        $subcategory1Data = $this->generateSubcategoryData($category);
+        $subcategory1 = Subcategory::create($subcategory1Data);
+
+        $subcategory2Data = $this->generateSubcategoryData($category);
+        $subcategory2 = Subcategory::create($subcategory2Data);
+
+        $brand1 = Brand::create($this->generateBrandData($category));
+        $brand2 = Brand::create($this->generateBrandData($category));
+
+        $product1Data = $this->generateProductData(1, $subcategory1, $brand1)[0];
+        $product1 = Product::create($product1Data);
+        Image::create($this->generateImageData($product1));
+
+        $product2Data = $this->generateProductData(1, $subcategory1, $brand2)[0];
+        $product2 = Product::create($product2Data);
+        Image::create($this->generateImageData($product2));
+
+        $product3Data = $this->generateProductData(1, $subcategory2, $brand1)[0];
+        $product3 = Product::create($product3Data);
+        Image::create($this->generateImageData($product3));
+
+        $response = $this->get('/categories/' . $category->slug . '?subcategoria=' . urlencode($subcategory1->slug) . '&marca=' . urlencode($brand1->name));
+
+        $response->assertStatus(200);
+        $response->assertSee($category->name);
+        $response->assertSee($product1->name);
+        $response->assertDontSee($product2->name);
+        $response->assertDontSee($product3->name);
     }
+
 }
 
