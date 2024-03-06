@@ -2,19 +2,27 @@
 
 namespace Tests\Unit;
 
+use App\Http\Livewire\AddCartItem;
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Color;
+use App\Models\Image;
 use App\Models\Size;
+use App\Models\Subcategory;
 use App\Models\User;
+use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Livewire\Livewire;
+use Tests\CreateData;
 use Tests\TestCase;
 use Tests\TestResources;
 
 class CartTest extends TestCase
 {
-    /*use RefreshDatabase;*/
+    use RefreshDatabase, CreateData;
 
     /** @test */
     /*public function it_adds_multiple_items_to_cart_and_maintains_cart_after_login()
@@ -87,4 +95,30 @@ class CartTest extends TestCase
         $this->assertTrue(Cart::content()->contains('id', $mobile->id));
         $this->assertTrue(Cart::content()->contains('id', $shirt->id));
     }*/
+
+    /** @test */
+    public function products_are_added_to_cart()
+    {
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
+
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
+
+        $productData = $this->generateProductData(1, $subcategory, $brand);
+        $product = Product::create($productData[0]);
+
+        $imageData = $this->generateImageData($product);
+        Image::create($imageData);
+
+        Livewire::test(AddCartItem::class, ['product' => $product])
+            ->call('addItem')
+            ->assertEmitted('render');
+
+        $response = $this->get('/');
+        $response->assertSee($product->name);
+    }
 }
