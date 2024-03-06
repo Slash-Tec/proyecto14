@@ -77,7 +77,7 @@ trait CreateData
                 'quantity' => rand(1, 50),
                 'sold' => rand(0, 30),
                 'reserved' => rand(0, 10),
-                'status' => rand(1, 2),
+                'status' => 2,
             ];
         }
 

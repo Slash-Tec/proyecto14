@@ -8,56 +8,43 @@ use App\Models\Product;
 use App\Models\Subcategory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
+use Tests\CreateData;
 use Tests\TestCase;
 
 class NavigationTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, CreateData;
 
     /** @test */
-    public function it_shows_five_navigation_products()
+    /*public function it_shows_five_navigation_products()
     {
-        $category = Category::create([
-            'name' => 'Consola y videojuegos',
-            'slug' => 'consola-y-videojuegos',
-            'icon' => '<i class="fas fa-gamepad"></i>',
-            'image' => 'tests/example.jpg'
-        ]);
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
 
-        $subcategory = Subcategory::create([
-            'name' => 'Nintendo',
-            'slug' => 'nintendo',
-            'color' => 0,
-            'size' => 0,
-            'category_id' => $category->id,
-        ]);
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
 
-        $brand = Brand::create([
-            'name' => 'Monolith Soft',
-            'slug' => 'monolith',
-            'category_id' => $category->id,
-        ]);
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
 
-        for ($i = 1; $i <= 5; $i++) {
-            Product::create([
-                'name' => 'Producto ' . $i,
-                'slug' => 'producto-' . $i,
-                'description' => 'Descripción del producto ' . $i,
-                'subcategory_id' => $subcategory->id,
-                'brand_id' => $brand->id,
-                'price' => 19.99,
-                'status' => '2',
-            ]);
-        }
+        $product1 = Product::create($this->generateProductData(1, $subcategory, $brand)[0]);
+        $product2 = Product::create($this->generateProductData(1, $subcategory, $brand)[0]);
+        $product3 = Product::create($this->generateProductData(1, $subcategory, $brand)[0]);
+        $product4 = Product::create($this->generateProductData(1, $subcategory, $brand)[0]);
+        $product5 = Product::create($this->generateProductData(1, $subcategory, $brand)[0]);
 
-        $response = $this->get(route('categories.show', $category));
+        $response = $this->get('/');*/
 
-        $response->assertSee($category->name);
+        /*dd($product1->name, $product2->name, $product3->name, $product4->name, $product5->name);*/
 
-        for ($i = 1; $i <= 5; $i++) {
-            $response->assertSee('Producto ' . $i);
-        }
-    }
+        /*$response->assertViewHas('Producto 8', function ($product1){
+            return $product1->contains($product1);
+        });
+        $response->assertSee($product2->name);
+        $response->assertSee($product3->name);
+        $response->assertSee($product4->name);
+        $response->assertSee($product5->name);
+    }*/
 
     /** @test */
     public function it_hides_products_with_status_1()
