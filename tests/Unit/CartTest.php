@@ -3,6 +3,8 @@
 namespace Tests\Unit;
 
 use App\Http\Livewire\AddCartItem;
+use App\Http\Livewire\ShoppingCart;
+use App\Http\Livewire\UpdateCartItem;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
@@ -151,5 +153,111 @@ class CartTest extends TestCase
             ->assertSee($product->name)
             ->assertSee('Carrito de compras')
             ->assertSee('Total');
+    }
+
+    /** @test */
+    public function products_can_change_quantity_in_cart()
+    {
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
+
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
+
+        $productData = $this->generateProductData(1, $subcategory, $brand);
+        $product = Product::create($productData[0]);
+
+        $imageData = $this->generateImageData($product);
+        Image::create($imageData);
+
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        Livewire::test(AddCartItem::class, ['product' => $product])
+            ->call('addItem')
+            ->assertEmitted('render');
+
+        $this->get('/shopping-cart')
+            ->assertSee($product->name)
+            ->assertSee(number_format($product->price, 2));
+
+        Livewire::test(UpdateCartItem::class, ['rowId' => Cart::content()->first()->rowId])
+            ->call('increment')
+            ->assertEmitted('render');
+
+        $this->get('/shopping-cart')
+            ->assertSee(2)
+            ->assertSee(number_format($product->price * 2, 2));
+    }
+
+    /** @test */
+    public function product_can_be_removed_from_cart()
+    {
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
+
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
+
+        $productData = $this->generateProductData(1, $subcategory, $brand);
+        $product = Product::create($productData[0]);
+
+        $imageData = $this->generateImageData($product);
+        Image::create($imageData);
+
+        Livewire::test(AddCartItem::class, ['product' => $product])
+            ->call('addItem')
+            ->assertEmitted('render');
+
+        Livewire::test(ShoppingCart::class)
+            ->assertSee($product->name);
+
+        $firstRowId = \Cart::content()->first()->rowId;
+
+        Livewire::test(ShoppingCart::class)
+            ->call('delete', $firstRowId)
+            ->assertEmitted('render');
+
+        Livewire::test(ShoppingCart::class)
+            ->assertDontSee($product->name);
+    }
+
+    /** @test */
+    public function cart_can_be_dropped()
+    {
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
+
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
+
+        $productData = $this->generateProductData(1, $subcategory, $brand);
+        $product = Product::create($productData[0]);
+
+        $imageData = $this->generateImageData($product);
+        Image::create($imageData);
+
+        Livewire::test(AddCartItem::class, ['product' => $product])
+            ->call('addItem')
+            ->assertEmitted('render');
+
+        Livewire::test(ShoppingCart::class)
+            ->assertSee($product->name);
+
+        Livewire::test(ShoppingCart::class)
+            ->call('destroy')
+            ->assertEmitted('render');
+
+        Livewire::test(ShoppingCart::class)
+            ->assertDontSee($product->name);
     }
 }
