@@ -97,7 +97,7 @@ class CartTest extends TestCase
     }*/
 
     /** @test */
-    public function products_are_added_to_cart()
+    public function products_are_visible_in_minicart()
     {
         $categoryData = $this->generateCategoryData();
         $category = Category::create($categoryData);
@@ -120,5 +120,36 @@ class CartTest extends TestCase
 
         $response = $this->get('/');
         $response->assertSee($product->name);
+    }
+
+    /** @test */
+    public function products_are_visible_in_cart()
+    {
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
+
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
+
+        $productData = $this->generateProductData(1, $subcategory, $brand);
+        $product = Product::create($productData[0]);
+
+        $imageData = $this->generateImageData($product);
+        Image::create($imageData);
+
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        Livewire::test(AddCartItem::class, ['product' => $product])
+            ->call('addItem')
+            ->assertEmitted('render');
+
+        $this->get('/shopping-cart')
+            ->assertSee($product->name)
+            ->assertSee('Carrito de compras')
+            ->assertSee('Total');
     }
 }
