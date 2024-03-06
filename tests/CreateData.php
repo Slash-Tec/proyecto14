@@ -4,9 +4,12 @@ namespace Tests;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\City;
 use App\Models\Color;
 use App\Models\ColorProduct;
 use App\Models\ColorSize;
+use App\Models\Department;
+use App\Models\District;
 use App\Models\Product;
 use App\Models\Size;
 
@@ -150,6 +153,30 @@ trait CreateData
             'url' => 'image' . $this->generateUniqueCounter() . '.jpg',
             'imageable_id' => $product->id,
             'imageable_type' => Product::class,
+        ];
+    }
+
+    public function generateDepartmentData()
+    {
+        return [
+            'name' => 'Departamento' . $this->generateUniqueCounter(),
+        ];
+    }
+
+    public function generateCityData($department)
+    {
+        return [
+            'name' => 'Ciudad' . $this->generateUniqueCounter(),
+            'cost' => rand(10, 100) / 10,
+            'department_id' => $department->id,
+        ];
+    }
+
+    public function generateDistrictData($city)
+    {
+        return [
+            'name' => 'Distrito' . $this->generateUniqueCounter(),
+            'city_id' => $city->id,
         ];
     }
 
