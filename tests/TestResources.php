@@ -10,7 +10,7 @@ use App\Models\Size;
 use App\Models\Subcategory;
 use App\Models\User;
 
-class TestResources
+trait TestResources
 {
     public static function createXenoblade()
     {

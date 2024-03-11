@@ -5,17 +5,20 @@ use App\Http\Livewire\AddCartItemColor;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\ColorProduct;
+use App\Models\ColorSize;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\Size;
 use App\Models\Subcategory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
+use Tests\CreateData;
 use Tests\TestCase;
 
 class ProductsTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, CreateData;
 
     /** @test */
     public function it_shows_product_details()
@@ -290,4 +293,103 @@ class ProductsTest extends TestCase
             ->assertSee($availableSizes[0]->name);
     }
 
+    /** @test */
+    public function it_displays_stock_on_product_page()
+    {
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
+
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
+
+        $productData = $this->generateProductData(1, $subcategory, $brand);
+        $product = Product::create($productData[0]);
+
+        $imageData = $this->generateImageData($product);
+        Image::create($imageData);
+
+        $response = $this->get("/products/{$product->slug}");
+
+        $response->assertStatus(200);
+
+        $response->assertSee($product->name);
+        $response->assertSee($product->quantity);
+    }
+
+    /** @test */
+    public function it_displays_stock_with_color_on_product_page()
+    {
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
+
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
+
+        $this->generateColorData();
+        $color = Color::first();
+
+        $productData = $this->generateProductData(1, $subcategory, $brand);
+        $product = Product::create($productData[0]);
+
+        $this->generateColorProductData(1, $product, $color);
+
+        $quantity = ColorProduct::where('color_id', $color->id)
+            ->where('product_id', $product->id)
+            ->value('quantity');
+
+        $imageData = $this->generateImageData($product);
+        Image::create($imageData);
+
+        $response = $this->get("/products/{$product->slug}");
+
+        $response->assertStatus(200)
+            ->assertSee($product->name)
+            ->assertSee($quantity)
+            ->assertSee("Color");
+    }
+
+    /** @test */
+    public function it_displays_stock_with_color_and_size_on_product_page()
+    {
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
+
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
+
+        $this->generateColorData();
+        $color = Color::first();
+
+        $productData = $this->generateProductData(1, $subcategory, $brand);
+        $product = Product::create($productData[0]);
+
+        $sizeData = $this->generateSizeData($product->id);
+        $sizeId = $sizeData->id;
+
+        $this->generateColorProductData(1, $product, $color);
+
+        $quantity = ColorSize::where('color_id', $color->id)
+            ->where('size_id', $product->sizes->first()->id)
+            ->value('quantity');
+
+        $imageData = $this->generateImageData($product);
+        Image::create($imageData);
+
+        $response = $this->get("/products/{$product->slug}");
+
+        $response->assertStatus(200)
+            ->assertSee($product->name)
+            ->assertSee($quantity);
+    }
+
 }
+

@@ -24,7 +24,7 @@ Semana 3
 2-Pasa pero mejorar la response
 3
 4
-5
+5-Pasan las pruebas
 6
 7-Pasan las pruebas
 8-Pasan las pruebas

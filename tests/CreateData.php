@@ -10,8 +10,14 @@ use App\Models\ColorProduct;
 use App\Models\ColorSize;
 use App\Models\Department;
 use App\Models\District;
+use App\Models\Image;
 use App\Models\Product;
 use App\Models\Size;
+use App\Models\Subcategory;
+use Database\Seeders\ColorProductSeeder;
+use Database\Seeders\ProductSeeder;
+use Database\Seeders\SizeSeeder;
+use Illuminate\Database\Query\Builder;
 
 trait CreateData
 {
@@ -51,18 +57,19 @@ trait CreateData
             ];
     }
 
-    public function generateColorData($count)
+    public function generateColorData()
     {
-        $colors = [];
-        for ($i = 1; $i <= $count; $i++) {
-            $color = [
-                'name' => 'Color' . $i,
-            ];
-            $colors[] = $color;
+        $colors = ['Amarillo', 'Azul', 'Verde', 'Rojo'];
+
+        $colorData = [];
+        foreach ($colors as $colorName) {
+            $color = ['name' => $colorName];
+            $colorData[] = $color;
         }
 
-        Color::insert($colors);
+        Color::insert($colorData);
     }
+
 
     public function generateProductData($quantity, $subcategory, $brand)
     {
@@ -87,61 +94,51 @@ trait CreateData
         return $products;
     }
 
-    public function generateColorProductData($count)
+    public function generateColorProductData($count, $product, $color)
     {
-        $colors = Color::pluck('id')->toArray();
-        $products = Product::pluck('id')->toArray();
-
         $colorProductData = [];
-        for ($i = 1; $i <= $count; $i++) {
-            $colorId = $colors[array_rand($colors)];
-            $productId = $products[array_rand($products)];
 
-            $colorProduct = [
-                'color_id' => $colorId,
-                'product_id' => $productId,
+        for ($i = 1; $i <= $count; $i++) {
+            $colorProductData[] = [
+                'color_id' => $color->id,
+                'product_id' => $product->id,
                 'quantity' => rand(1, 10),
             ];
-
-            $colorProductData[] = $colorProduct;
         }
 
         ColorProduct::insert($colorProductData);
     }
 
-    public function generateSizeData($count)
+    public function generateSizeData($productId)
     {
-        $products = Product::pluck('id')->toArray();
-
-        $sizes = [];
-        for ($i = 1; $i <= $count; $i++) {
-            $size = [
-                'name' => 'Size' . $i,
-                'product_id' => $products[array_rand($products)],
-            ];
-            $sizes[] = $size;
-        }
-
-        Size::insert($sizes);
+        return Size::create([
+            'name' => 'Size' . $this->generateUniqueCounter(),
+            'product_id' => $productId,
+        ]);
     }
 
-    public function generateColorSizeData($count)
+    public function generateColorSizeData()
     {
         $colors = Color::pluck('id')->toArray();
-        $sizes = Size::pluck('id')->toArray();
+
+        if (empty($colors)) {
+            return;
+        }
+
+        $sizeIds = Size::pluck('id')->toArray();
 
         $colorSizeData = [];
-        for ($i = 1; $i <= $count; $i++) {
-            $colorId = $colors[array_rand($colors)];
-            $sizeId = $sizes[array_rand($sizes)];
 
-            $colorSize = [
-                'color_id' => $colorId,
-                'size_id' => $sizeId,
-                'quantity' => rand(1, 10),
-            ];
+        foreach ($colors as $colorId) {
+            foreach ($sizeIds as $sizeId) {
+                $colorSize = [
+                    'color_id' => $colorId,
+                    'size_id' => $sizeId,
+                    'quantity' => rand(1, 10),
+                ];
 
-            $colorSizeData[] = $colorSize;
+                $colorSizeData[] = $colorSize;
+            }
         }
 
         ColorSize::insert($colorSizeData);
