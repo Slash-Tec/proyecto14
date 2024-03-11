@@ -6,14 +6,17 @@ use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\Subcategory;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Livewire\Livewire;
+use Spatie\Permission\Models\Role;
 use Tests\CreateData;
 use Tests\TestCase;
 
 class NavigationTest extends TestCase
 {
-    use RefreshDatabase, CreateData;
+    use RefreshDatabase, CreateData, WithFaker;
 
     /** @test */
     /*public function it_shows_five_navigation_products()
@@ -83,5 +86,57 @@ class NavigationTest extends TestCase
         $response = $this->get('/');
         $response->assertStatus(200);
         $response->assertDontSee('Xenoblade Chronicles 3');
+    }
+
+    /** @test */
+    public function it_redirects_guest_users_to_login_from_admin_content()
+    {
+        $routes = [
+            '/admin',
+            '/admin/orders',
+            '/admin/categories',
+            '/admin/brands',
+            '/admin/departments',
+            '/admin/users',
+        ];
+
+        foreach ($routes as $route) {
+            $response = $this->get($route);
+            $response->assertRedirect('/login');
+        }
+    }
+
+    /** @test */
+    public function it_redirects_guest_users_to_login_from_orders_create()
+    {
+        $response = $this->get('/orders/create');
+        $response->assertRedirect('/login');
+    }
+
+    /** @test */
+    public function authenticated_user_has_access_to_orders_create()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->get('/orders/create');
+
+        $response->assertSee("Nombre de contacto");
+    }
+
+    /** @test */
+    public function admin_can_access_admin_orders()
+    {
+        $adminRole = Role::create(['name' => 'admin']);
+
+        $adminUser = User::factory()->create();
+        $adminUser->assignRole('admin');
+
+        $this->actingAs($adminUser);
+
+        $response = $this->get('/admin/orders');
+
+        $response->assertStatus(200);
+        $response->assertSee('Pedidos');
     }
 }
