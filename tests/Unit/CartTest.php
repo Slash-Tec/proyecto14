@@ -98,7 +98,7 @@ class CartTest extends TestCase
         $this->assertTrue(Cart::content()->contains('id', $shirt->id));
     }*/
 
-    /** @test */
+    /** @test */ //Mejorar
     public function products_are_visible_in_minicart()
     {
         $categoryData = $this->generateCategoryData();

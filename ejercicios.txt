@@ -21,7 +21,7 @@ Semana 2
 Semana 3
 
 1
-2-Pasa pero mejorar la response
+2-Apañado para que pase, necesito saber como usar el minicarrito en test
 3
 4
 5-Pasan las pruebas
@@ -37,13 +37,13 @@ Semana 3
 
 Semana 4
 
-1
+1-Pasan las pruebas
 2
 3
 4
 5
 6
-7
+7-Pasan las pruebas
 8
 9
 
