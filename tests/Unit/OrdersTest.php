@@ -75,4 +75,43 @@ class OrdersTest extends TestCase
         $response = $this->get('/orders/create');
         $response->assertRedirect('/login');
     }
+
+    /** @test */
+    public function users_cannot_access_orders_of_other_users()
+    {
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+
+        $order = Order::create([
+            'user_id' => $user1->id,
+            'contact' => 'Pepe',
+            'phone' => '123456789',
+            'shipping_cost' => 0.00,
+            'total' => 99.99,
+            'content' => json_encode([
+                '72e0baecb4ab28c9f4bde7b9ec28bfa2' => [
+                    'id' => 42,
+                    'qty' => 1,
+                    'tax' => 21,
+                    'name' => 'Optio dolor odio.',
+                    'price' => 99.99,
+                    'rowId' => '72e0baecb4ab28c9f4bde7b9ec28bfa2',
+                    'weight' => 550,
+                    'options' => [
+                        'image' => '/storage/products/bd44a5365422a7c6ec306eabfe7ece95.jpg',
+                        'size_id' => null,
+                        'color_id' => null,
+                    ],
+                    'discount' => 0,
+                    'subtotal' => 99.99,
+                ]
+            ])
+        ]);
+
+        $this->actingAs($user2);
+
+        $response = $this->get(route('orders.show', $order));
+
+        $response->assertForbidden();
+    }
 }

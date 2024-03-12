@@ -17,7 +17,7 @@ class AdminTest extends TestCase
 {
     use RefreshDatabase, CreateData;
 
-    /** @test */ 
+    /** @test */
     public function admin_can_search_and_view_results()
     {
         $categoryData = $this->generateCategoryData();

@@ -38,7 +38,7 @@ Semana 3
 Semana 4
 
 1-Pasan las pruebas
-2
+2-Pasan las pruebas
 3
 4
 5
