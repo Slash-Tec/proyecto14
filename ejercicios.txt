@@ -40,12 +40,14 @@ Semana 4
 1-Pasan las pruebas
 2-Pasan las pruebas
 3
-4
+4-Pasan las pruebas
 5
 6
 7-Pasan las pruebas
-8
-9
+8-Las pruebas pasan, pero hay un error que no guarda correctamente
+  el objeto y ocurre aleatoriamente
+9-Las pruebas pasan y parece que no ocurre el problema del 8, pero
+  los tests se quedan pillados y hay que hacer Ctrl+C y relanzarlos
 
 Semana 5
 

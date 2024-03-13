@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Livewire\Admin\CreateProduct;
+use App\Http\Livewire\Admin\EditProduct;
 use App\Http\Livewire\Search;
 use App\Models\Image;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -63,4 +65,94 @@ class AdminTest extends TestCase
             ->assertSee('ZZZZ');
     }
 
+    public function admin_can_edit_product()
+    {
+        $adminRole = Role::create(['name' => 'admin']);
+        $adminUser = User::factory()->create();
+        $adminUser->assignRole('admin');
+        $this->actingAs($adminUser);
+
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
+
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
+
+        $productData = $this->generateProductData(1, $subcategory, $brand);
+        $product = Product::create($productData[0]);
+
+        $imageData = $this->generateImageData($product);
+        Image::create($imageData);
+
+        $editUrl = '/admin/products/' . $product->slug . '/edit';
+
+        $response = $this->get($editUrl);
+        $response->assertStatus(200);
+
+        Livewire::test(EditProduct::class, ['product' => $product])
+            ->set('name', 'Nuevo Nombre')
+            ->set('description', 'Nueva Descripcion')
+            ->set('price', 19.99)
+            ->call('save')
+            ->assertRedirect($editUrl);
+
+        $this->assertDatabaseHas('products', [
+            'id' => $product->id,
+            'name' => 'Nuevo Nombre',
+            'description' => 'Nueva Descripcion',
+            'price' => 19.99,
+        ]);
+
+        $adminPageResponse = $this->get('/admin');
+        $adminPageResponse->assertSee('Nuevo Nombre');
+    }
+
+    /** @test */
+    public function admin_can_create_product()
+    {
+        $adminRole = Role::create(['name' => 'admin']);
+
+        $adminUser = User::factory()->create();
+        $adminUser->assignRole('admin');
+
+        $this->actingAs($adminUser);
+
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
+
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
+
+        $response = $this->get('/admin/products/create');
+
+        $response->assertStatus(200);
+
+        $response = Livewire::test(CreateProduct::class)
+            ->set('category_id', $category->id)
+            ->set('subcategory_id', $subcategory->id)
+            ->set('brand_id', $brand->id)
+            ->set('name', 'Ragnarok')
+            ->set('description', 'Descripcion del producto')
+            ->set('price', 10.99)
+            ->call('save')
+            ->assertRedirect('/admin/products/ragnarok/edit');
+
+        $this->assertDatabaseHas('products', [
+            'name' => 'Ragnarok',
+            'description' => 'Descripcion del producto',
+            'price' => 10.99,
+        ]);
+
+        $response = $this->get('/admin');
+
+        $response->assertStatus(200);
+
+        $response->assertSee('Ragnarok');
+    }
 }

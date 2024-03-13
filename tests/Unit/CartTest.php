@@ -3,6 +3,8 @@
 namespace Tests\Unit;
 
 use App\Http\Livewire\AddCartItem;
+use App\Http\Livewire\AddCartItemColor;
+use App\Http\Livewire\AddCartItemSize;
 use App\Http\Livewire\ShoppingCart;
 use App\Http\Livewire\UpdateCartItem;
 use App\Models\Brand;
@@ -259,5 +261,121 @@ class CartTest extends TestCase
 
         Livewire::test(ShoppingCart::class)
             ->assertDontSee($product->name);
+    }
+
+    /** @test */
+    public function it_displays_stock_on_product_page_and_updates_correctly_when_added_to_cart()
+    {
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
+
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
+
+        $productData = $this->generateProductData(1, $subcategory, $brand);
+        $product = Product::create($productData[0]);
+
+        $product->update(['quantity' => 15]);
+
+        $imageData = $this->generateImageData($product);
+        Image::create($imageData);
+
+        $response = $this->get("/products/{$product->slug}");
+
+        $response->assertStatus(200);
+        $response->assertSee($product->name);
+        $response->assertSee($product->quantity);
+
+        Livewire::test(AddCartItem::class, ['product' => $product])
+            ->call('addItem')
+            ->assertEmitted('render');
+
+        $responseAfterAddingToCart = $this->get("/products/{$product->slug}");
+
+        $responseAfterAddingToCart->assertSee(14);
+    }
+
+    /** @test */
+    public function it_displays_stock_with_color_on_product_page_and_updates_correctly_when_added_to_cart()
+    {
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
+
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
+
+        $productData = $this->generateProductData(1, $subcategory, $brand);
+        $product = Product::create($productData[0]);
+
+        $imageData = $this->generateImageData($product);
+        Image::create($imageData);
+
+        $this->generateColorData();
+        $color = Color::first();
+
+        $this->generateColorProductData(1, $product, $color, ['quantity' => 15]);
+
+        $response = $this->get("/products/{$product->slug}");
+
+        $response->assertStatus(200);
+        $response->assertSee($product->name);
+        $response->assertSee("Color");
+        $response->assertSee('15');
+
+        Livewire::test(AddCartItemColor::class, ['product' => $product, 'colors' => [$color]])
+            ->set('color_id', $color->id)
+            ->call('addItem');
+
+        $responseAfterAddingToCart = $this->get("/products/{$product->slug}");
+
+        $responseAfterAddingToCart->assertSee('14');
+    }
+
+    /** @test */
+    public function it_displays_stock_with_color_and_size_on_product_page_and_updates_correctly_when_added_to_cart()
+    {
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
+
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
+
+        $productData = $this->generateProductData(1, $subcategory, $brand);
+        $product = Product::create($productData[0]);
+
+        $imageData = $this->generateImageData($product);
+        Image::create($imageData);
+
+        $this->generateColorData();
+        $color = Color::first();
+
+        $this->generateSizeData($product->id);
+        $size = Size::where('product_id', $product->id)->first();
+
+        $this->generateColorSizeData($color, $size, ['quantity' => 10]);
+
+        $response = $this->get("/products/{$product->slug}");
+
+        $response->assertStatus(200);
+        $response->assertSee($product->name);
+        $response->assertSee('10');
+
+        Livewire::test(AddCartItemSize::class, ['product' => $product, 'sizes' => [$size]])
+            ->set('size_id', $size->id)
+            ->set('color_id', $color->id)
+            ->call('addItem');
+
+        $responseAfterAddingToCart = $this->get("/products/{$product->slug}");
+
+        $responseAfterAddingToCart->assertSee('9');
     }
 }
