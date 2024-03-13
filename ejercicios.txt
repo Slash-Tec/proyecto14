@@ -20,7 +20,7 @@ Semana 2
 
 Semana 3
 
-1
+1-Este ya lo hice con los it_displays_stock_on_product_page
 2-Apañado para que pase, necesito saber como usar el minicarrito en test
 3
 4
@@ -32,15 +32,16 @@ Semana 3
 10-Pasan las pruebas
 11
 12
-13
+13-Creo que ya lo hice en el 9.
 14
 
 Semana 4
 
 1-Pasan las pruebas
 2-Pasan las pruebas
-3
-4-Pasan las pruebas
+3-Pasan las pruebas
+4-Pasan las pruebas, se me olvido hacer commit antes, esta en el
+  commit de la tarea 8,9
 5
 6
 7-Pasan las pruebas

@@ -126,6 +126,8 @@ class CartTest extends TestCase
         $response->assertSee($product->name);
     }
 
+
+
     /** @test */
     public function products_are_visible_in_cart()
     {
