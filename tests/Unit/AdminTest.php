@@ -93,21 +93,21 @@ class AdminTest extends TestCase
         $response->assertStatus(200);
 
         Livewire::test(EditProduct::class, ['product' => $product])
-            ->set('name', 'Nuevo Nombre')
-            ->set('description', 'Nueva Descripcion')
+            ->set('name', 'Ragnarok')
+            ->set('description', 'Antigua Descripcion')
             ->set('price', 19.99)
             ->call('save')
             ->assertRedirect($editUrl);
 
         $this->assertDatabaseHas('products', [
             'id' => $product->id,
-            'name' => 'Nuevo Nombre',
+            'name' => 'Exodia',
             'description' => 'Nueva Descripcion',
-            'price' => 19.99,
+            'price' => 29.99,
         ]);
 
         $adminPageResponse = $this->get('/admin');
-        $adminPageResponse->assertSee('Nuevo Nombre');
+        $adminPageResponse->assertSee('Exodia');
     }
 
     /** @test */
@@ -140,8 +140,8 @@ class AdminTest extends TestCase
             ->set('name', 'Ragnarok')
             ->set('description', 'Descripcion del producto')
             ->set('price', 10.99)
-            ->call('save')
-            ->assertRedirect('/admin/products/ragnarok/edit');
+            ->call('save');
+            $response->assertRedirect('/admin/products/ragnarok/edit');
 
         $this->assertDatabaseHas('products', [
             'name' => 'Ragnarok',

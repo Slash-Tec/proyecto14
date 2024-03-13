@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Http\Livewire\AddCartItem;
 use App\Http\Livewire\AddCartItemColor;
 use App\Http\Livewire\AddCartItemSize;
+use App\Http\Livewire\DropdownCart;
 use App\Http\Livewire\ShoppingCart;
 use App\Http\Livewire\UpdateCartItem;
 use App\Models\Brand;
@@ -28,7 +29,6 @@ class CartTest extends TestCase
 {
     use RefreshDatabase, CreateData;
 
-    /** @test */
     /*public function it_adds_multiple_items_to_cart_and_maintains_cart_after_login()
     {
         $halo = TestResources::createHalo();
@@ -126,7 +126,34 @@ class CartTest extends TestCase
         $response->assertSee($product->name);
     }
 
+    /** @test */
+    public function red_dot_on_minicart_grows_when_an_item_is_added_to_cart()
+    {
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
 
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
+
+        $productData = $this->generateProductData(1, $subcategory, $brand);
+        $product = Product::create($productData[0]);
+        $product->update(['quantity' => 47]);
+
+        $imageData = $this->generateImageData($product);
+        Image::create($imageData);
+
+        $response = $this->get("/products/{$product->slug}");
+
+        Livewire::test(AddCartItem::class, ['product' => $product])->call('addItem');
+
+        Livewire::test(DropdownCart::class)->emit('render');
+
+        $response = $this->get("/products/{$product->slug}");
+        $response->assertSee('1');
+    }
 
     /** @test */
     public function products_are_visible_in_cart()

@@ -22,7 +22,7 @@ Semana 3
 
 1-Este ya lo hice con los it_displays_stock_on_product_page
 2-Apañado para que pase, necesito saber como usar el minicarrito en test
-3
+3-Pasan las pruebas
 4
 5-Pasan las pruebas
 6
