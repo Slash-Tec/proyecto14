@@ -156,6 +156,33 @@ class CartTest extends TestCase
     }
 
     /** @test */
+    public function you_can_only_add_as_many_items_as_available_in_stock()
+    {
+        $categoryData = $this->generateCategoryData();
+        $category = Category::create($categoryData);
+
+        $brandData = $this->generateBrandData($category);
+        $brand = Brand::create($brandData);
+
+        $subcategoryData = $this->generateSubcategoryData($category);
+        $subcategory = Subcategory::create($subcategoryData);
+
+        $productData = $this->generateProductData(1, $subcategory, $brand);
+        $product = Product::create($productData[0]);
+
+        $imageData = $this->generateImageData($product);
+        Image::create($imageData);
+
+        $response = $this->get("/products/{$product->slug}");
+
+        Livewire::test(AddCartItem::class, ['product' => $product])->call('addItem');
+
+        $response = $this->get("/products/{$product->slug}");
+        $response->assertSee('0')
+                 ->assertSee('Agregar al carrito de compras');
+    }
+
+    /** @test */
     public function products_are_visible_in_cart()
     {
         $categoryData = $this->generateCategoryData();
@@ -306,8 +333,6 @@ class CartTest extends TestCase
 
         $productData = $this->generateProductData(1, $subcategory, $brand);
         $product = Product::create($productData[0]);
-
-        $product->update(['quantity' => 15]);
 
         $imageData = $this->generateImageData($product);
         Image::create($imageData);

@@ -84,7 +84,7 @@ trait CreateData
                 'price' => rand(10, 100),
                 'subcategory_id' => $subcategory->id,
                 'brand_id' => $brand->id,
-                'quantity' => rand(1, 50),
+                'quantity' => 15,
                 'sold' => rand(0, 30),
                 'reserved' => rand(0, 10),
                 'status' => 2,
