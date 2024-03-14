@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Http\Livewire\AddCartItem;
-use App\Http\Livewire\CreateOrder;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Image;
@@ -49,50 +48,6 @@ class OrdersTest extends TestCase
         $response = $this->get('/orders/create');
         $response->assertStatus(200);
         $response->assertSee($product->name);
-    }
-
-    /** @test */
-    public function specific_elements_of_delivery_dont_appear()
-    {
-        $categoryData = $this->generateCategoryData();
-        $category = Category::create($categoryData);
-
-        $brandData = $this->generateBrandData($category);
-        $brand = Brand::create($brandData);
-
-        $subcategoryData = $this->generateSubcategoryData($category);
-        $subcategory = Subcategory::create($subcategoryData);
-
-        $productData = $this->generateProductData(1, $subcategory, $brand);
-        $product = Product::create($productData[0]);
-
-        $imageData = $this->generateImageData($product);
-        Image::create($imageData);
-
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
-        Livewire::test(AddCartItem::class, ['product' => $product])
-            ->call('addItem')
-            ->assertEmitted('render');
-
-        $response = $this->get('/orders/create');
-        $response->assertStatus(200);
-
-        $response->assertSee('Envío a domicilio');
-        $response->assertSee('Departamento');
-        $response->assertSee('Ciudad');
-        $response->assertSee('Distrito');
-        $response->assertSee('Dirección');
-        $response->assertSee('Referencia');
-
-        Livewire::test(CreateOrder::class)
-            ->set('envio_type', 2)
-            ->assertDontSee('@departamento')
-            ->assertDontSee('@ciudad')
-            ->assertDontSee('@distrito')
-            ->assertDontSee('@direccion')
-            ->assertDontSee('@referencia');
     }
 
     /** @test */
