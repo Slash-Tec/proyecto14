@@ -1,12 +1,1 @@
-1-Si, solo he llegado a la semana 2, lo he intentado, de verdad que si, pero cada test
-individual se me atascaba, y por cada cabezazo que le diera al error seguia estando,
-era un milagro si solucionaba el error en el mismo dia.
-
 https://github.com/Slash-Tec/proyecto14
-Si, el cambio de bd de pruebas lo he hecho al final porque siempre pides que la bd
-se llame examen, esta vez he hecho el examen en mi proyecto del github para no
-superponer examenes.
-
-2-Resulta que estuve intentando algo similar respecto a eso, lo que pasa es que yo
-creaba objetos completos, asi que voy a intentar crearlo de manera individual por
-tabla
